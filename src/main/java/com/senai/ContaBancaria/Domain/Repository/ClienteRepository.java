@@ -1,4 +1,7 @@
 package com.senai.ContaBancaria.Domain.Repository;
 
-public interface ClienteRepository {
+import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClienteRepository extends JpaRepository<ClienteEntity, String> {
 }
