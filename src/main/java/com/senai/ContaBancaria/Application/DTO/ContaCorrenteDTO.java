@@ -3,6 +3,7 @@ package com.senai.ContaBancaria.Application.DTO;
 import com.senai.ContaBancaria.Domain.Entity.ContaCorrenteEntity;
 
 public record ContaCorrenteDTO(
+        String id,
         int numeroConta,
         double saldo,
         double limite,
@@ -12,6 +13,7 @@ public record ContaCorrenteDTO(
     public static ContaCorrenteDTO fromEntity(ContaCorrenteEntity contaCorrente){
         if (contaCorrente == null) return null;
         return new ContaCorrenteDTO(
+                contaCorrente.getId(),
                 contaCorrente.getNumeroConta(),
                 contaCorrente.getSaldo(),
                 contaCorrente.getLimite(),
