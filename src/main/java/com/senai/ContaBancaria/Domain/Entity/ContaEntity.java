@@ -1,15 +1,18 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-@Entity
 @Data
-public class ContaEntity {
+@MappedSuperclass
+public abstract class ContaEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @NotNull
