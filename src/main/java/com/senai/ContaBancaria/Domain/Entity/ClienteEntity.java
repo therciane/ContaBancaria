@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.util.List;
 
+@Entity
 @Data
 public class ClienteEntity {
 
@@ -25,6 +26,6 @@ public class ClienteEntity {
     private long cpf;
 
     @ManyToOne
-    @NotBlank(message = "Area que indica qual a sua conta")
+    @NotBlank(message = "Area que indica qual será a sua conta")
     private List <String> tipoContas;
 }

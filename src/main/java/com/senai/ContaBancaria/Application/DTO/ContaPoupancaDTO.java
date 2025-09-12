@@ -1,6 +1,5 @@
 package com.senai.ContaBancaria.Application.DTO;
 
-import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaPoupancaEntity;
 
 public record ContaPoupancaDTO(
