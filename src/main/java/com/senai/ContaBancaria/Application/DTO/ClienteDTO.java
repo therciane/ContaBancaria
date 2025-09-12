@@ -2,6 +2,7 @@ package com.senai.ContaBancaria.Application.DTO;
 
 import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ClienteDTO(
@@ -20,5 +21,13 @@ public record ClienteDTO(
                 cliente.getCpf(),
                 cliente.getTipoContas()
         );
+    }
+
+    public ClienteEntity toEntity(){
+        ClienteEntity cliente = new ClienteEntity();
+        cliente.setNomeCompleto(this.nomeCompleto);
+        cliente.setCpf(this.cpf);
+        cliente.setTipoContas(this.tipContas != null ? new ArrayList<>(this.tipContas) : new ArrayList<>());
+        return cliente;
     }
 }
