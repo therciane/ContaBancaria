@@ -1,31 +1,40 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Data
+@Data //Ela não gera construtores
+@AllArgsConstructor //Gera os construtores
+@NoArgsConstructor //Gera construtores sem argumentos
+@Builder //?
+//Modela banco de dados
+@Table (
+        name = "cliente",
+        uniqueConstraints = @UniqueConstraint(name = "uk_cliente_cpf", columnNames = "cpf") //Chave unica impedindo nomes iuais
+
+)
 public class ClienteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Size(max = 5)
     private String id;
 
-    @NotBlank(message = "Está area não pode ficar em branco")
-    @Size(min = 3, max = 80)
+    @Column(nullable = false, length = 80) //modela tabela
     private String nomeCompleto;
 
-    @NotNull(message = "Area Obrigatoria")
     @Column(nullable = false, length = 11)
     private long cpf;
 
-    @ManyToOne
-    @NotBlank(message = "Area que indica qual será a sua conta")
-    private List <String> tipoContas;
+    @OneToMany (mappedBy = "cliente", cascade = CascadeType.ALL) //Relacionamento com banco de dados.
+    private List <ContaEntity> contas;
+
+    @Column(nullable = false)
+    private boolean ativo;
 }
+

@@ -1,18 +1,21 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.Length;
+import lombok.experimental.SuperBuilder;
+import java.math.BigDecimal;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
+@DiscriminatorValue("CORRENTE") //Valor que identifica a classe
 @Data
+@EqualsAndHashCode(callSuper = true) //Gera equals e hashcode considerando a superclasse
+@SuperBuilder
 public class ContaCorrenteEntity extends ContaEntity{
-    @NotNull
-    @Length(min = 1)
-    private double limite;
-
-    private long taxa;
+    @Column(nullable = false, precision = 19, scale = 3)
+    private BigDecimal limite;
+    @Column(nullable = false, precision = 19, scale = 4)
+    private BigDecimal taxa;
 }
