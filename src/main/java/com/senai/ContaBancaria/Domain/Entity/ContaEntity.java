@@ -38,4 +38,6 @@ public abstract class ContaEntity {
             foreignKey = @ForeignKey(name = "fk_conta_cliente")
     )
     private ClienteEntity cliente;
+
+    public abstract String getTipoConta();
 }

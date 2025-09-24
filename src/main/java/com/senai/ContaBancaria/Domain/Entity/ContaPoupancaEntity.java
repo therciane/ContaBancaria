@@ -18,4 +18,9 @@ import lombok.experimental.SuperBuilder;
 public class ContaPoupancaEntity extends ContaEntity {
     @Column(nullable = false, precision = 10, scale = 4)
     private long rendimento;
+
+    @Override
+    public String getTipoConta() {
+        return "POUPANCA";
+    }
 }

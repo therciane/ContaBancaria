@@ -18,4 +18,9 @@ public class ContaCorrenteEntity extends ContaEntity{
     private BigDecimal limite;
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal taxa;
+
+    @Override
+    public String getTipoConta() {
+        return "CORRENTE";
+    }
 }
