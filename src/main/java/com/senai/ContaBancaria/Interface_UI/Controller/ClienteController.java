@@ -5,10 +5,13 @@ import com.senai.ContaBancaria.Application.DTO.ClienteResponseDTO;
 import com.senai.ContaBancaria.Application.Service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController //Cuida das requisições HTTP.Avisa que a classe é um controlador
 @RequestMapping("/api/clientes") //Mapeia a rota
@@ -16,14 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class ClienteController {
 
-    //@Autowired //Algumas ferramentas de teste dão conflito com essa anotação
-    //private final ClienteService service; //bean de serviço. Injeção de dependência
-
     private final ClienteService service;
 
     @PostMapping
-    public ClienteResponseDTO registrarCliente(@RequestBody ClienteCadastroDTO dto) {
-        return service.registarClienteOuAnexarConta(dto);
+    public ResponseEntity <ClienteResponseDTO> registrarCliente(@RequestBody ClienteCadastroDTO dto) {
+        ClienteResponseDTO novoCliente = service.registarClienteOuAnexarConta(dto);
+
+        return ResponseEntity.created(
+                URI.create("api/cliente/cpf" + novoCliente.cpf())
+        ).body(novoCliente);
     }
 
 }

@@ -19,6 +19,7 @@ public record ContaResumoDTO(
                     .ativo(true)
                     .cliente(cliente)
                     .build();
+
         } else if ("POUPANCA".equalsIgnoreCase(tipoConta)) {
             return ContaCorrenteEntity.builder()
                     .numeroConta(this.numeroConta)
@@ -26,7 +27,6 @@ public record ContaResumoDTO(
                     .ativo(true)
                     .cliente(cliente)
                     .build();
-
         }
         return null;
     }
