@@ -6,6 +6,8 @@ import com.senai.ContaBancaria.Domain.Repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 //Isso que é um bean de serviço
 //Responsável pela lógica de negócio
 @Service
@@ -33,5 +35,11 @@ public class ClienteService {
 
 
         return ClienteResponseDTO.fromEntity(repository.save(cliente));
+    }
+
+    public List<ClienteResponseDTO> listarClientesAtivos() {
+        return repository.findAllByAtivoTrue().stream()
+                .map(ClienteResponseDTO::fromEntity)
+                .toList();
     }
 }
