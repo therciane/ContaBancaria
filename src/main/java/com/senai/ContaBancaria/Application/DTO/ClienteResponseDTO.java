@@ -7,8 +7,8 @@ import java.util.List;
 public record ClienteResponseDTO(
         String id,
         String nomeCompleto,
-        long cpf,
-        List <ContaResumoDTO> contas //Lista porque um cliente pode ter mais de uma conta
+        String cpf,
+        List<ContaResumoDTO> contas
 ) {
     public static ClienteResponseDTO fromEntity(ClienteEntity cliente) {
         List<ContaResumoDTO> contas = cliente.getContas().stream()

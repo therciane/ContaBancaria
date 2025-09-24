@@ -23,7 +23,7 @@ public class ClienteController {
 
     @PostMapping
     public ClienteResponseDTO registrarCliente(@RequestBody ClienteCadastroDTO dto) {
-        return service.registrarClienteOuAnexarConta(dto);
+        return service.registarClienteOuAnexarConta(dto);
     }
 
 }

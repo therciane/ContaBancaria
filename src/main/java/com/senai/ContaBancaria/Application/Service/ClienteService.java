@@ -14,27 +14,24 @@ public class ClienteService {
 
     private final ClienteRepository repository;
 
-    //Criar clente
-    public ClienteResponseDTO registrarClienteOuAnexarConta(ClienteCadastroDTO dto) {
+    public ClienteResponseDTO registarClienteOuAnexarConta(ClienteCadastroDTO dto) {
 
-        //var cria variavel sem ter que definir o tipo
-        var cliente = repository.findByCpfAndAtivoTrue(dto.cpf()).orElseGet(() -> repository.save(dto.toEntity()));
+        var cliente = repository.findByCpfAndAtivoTrue(dto.cpf()).orElseGet(
+                () -> repository.save(dto.toEntity())
+        );
 
-        var contas = cliente.getConta();
+        var contas = cliente.getContas();
         var novaConta = dto.contaDTO().toEntity(cliente);
 
-        boolean jaPossuiContaDoTipo = contas.stream() //stream transforma a lista em um fluxo de dados
-                .anyMatch(c -> c.getClass().equals(novaConta.getClass()) && c.isAtivo()); //anyMach verifica se algum elemento do fluxo satisfaz a condição
-        //Isso é polimorfismo
-        if (jaPossuiContaDoTipo) {
-            throw new RuntimeException("Cliente já possui uma conta ativa do tipo " + dto.contaDTO().tipoConta()); //Lança uma exceção. Funciona quando não precisa ser tratada
-        }
-        cliente.getConta().add(novaConta);
-        repository.save(cliente);
+        boolean jaTemTipo = contas.stream()
+                .anyMatch(c -> c.getClass().equals(novaConta.getClass()) && c.isAtivo());
+
+        if(jaTemTipo)
+            throw new RuntimeException("Cliente já possui uma conta ativa deste tipo.");
+
+        cliente.getContas().add(novaConta);
+
+
         return ClienteResponseDTO.fromEntity(repository.save(cliente));
-
-        return null;
     }
-
-
 }

@@ -29,7 +29,7 @@ public class ClienteEntity {
     private String nomeCompleto;
 
     @Column(nullable = false, length = 11)
-    private long cpf;
+    private String cpf;
 
     @OneToMany (mappedBy = "cliente", cascade = CascadeType.ALL) //Relacionamento com banco de dados.
     private List <ContaEntity> contas;

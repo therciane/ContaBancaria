@@ -17,7 +17,6 @@ public record ContaResumoDTO(
                     .numeroConta(this.numeroConta)
                     .saldo(this.saldo)
                     .ativo(true)
-                    .saldo(this.saldo)
                     .cliente(cliente)
                     .build();
         } else if ("POUPANCA".equalsIgnoreCase(tipoConta)) {
@@ -25,7 +24,6 @@ public record ContaResumoDTO(
                     .numeroConta(this.numeroConta)
                     .saldo(this.saldo)
                     .ativo(true)
-                    .saldo(this.saldo)
                     .cliente(cliente)
                     .build();
 
