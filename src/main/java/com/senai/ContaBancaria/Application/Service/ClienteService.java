@@ -48,4 +48,24 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         return ClienteResponseDTO.fromEntity(cliente);
     }
+
+    public ClienteResponseDTO atualizarCliente(String cpf, ClienteCadastroDTO dto) {
+        var cliente = repository.findByCpfAndAtivoTrue(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        cliente.setNomeCompleto(dto.nomeCompleto());
+        cliente.setCpf(dto.cpf());
+
+        return ClienteResponseDTO.fromEntity(repository.save(cliente));
+    }
+
+    public void deletarCliente(String cpf) {
+        var cliente = repository.findByCpfAndAtivoTrue(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado")); //Só deleta caso o o cliente pedir, caso contrário ele constinua inativo
+
+        cliente.setAtivo(false);
+        //cliente.getContas().forEach(c -> c.setAtivo(false));
+
+        repository.save(cliente);
+    }
 }
