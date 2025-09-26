@@ -3,6 +3,7 @@ package com.senai.ContaBancaria.Application.DTO;
 import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaCorrenteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
+import com.senai.ContaBancaria.Domain.Entity.ContaPoupancaEntity;
 
 import java.math.BigDecimal;
 
@@ -21,7 +22,7 @@ public record ContaResumoDTO(
                     .build();
 
         } else if ("POUPANCA".equalsIgnoreCase(tipoConta)) {
-            return ContaCorrenteEntity.builder()
+            return ContaPoupancaEntity.builder()
                     .numeroConta(this.numeroConta)
                     .saldo(this.saldo)
                     .ativo(true)

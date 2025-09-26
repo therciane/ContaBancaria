@@ -64,7 +64,7 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado")); //Só deleta caso o o cliente pedir, caso contrário ele constinua inativo
 
         cliente.setAtivo(false);
-        //cliente.getContas().forEach(c -> c.setAtivo(false));
+        cliente.getContas().forEach(c -> c.setAtivo(false));
 
         repository.save(cliente);
     }

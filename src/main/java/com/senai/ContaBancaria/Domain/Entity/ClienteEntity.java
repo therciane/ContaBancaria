@@ -37,4 +37,3 @@ public class ClienteEntity {
     @Column(nullable = false)
     private boolean ativo;
 }
-

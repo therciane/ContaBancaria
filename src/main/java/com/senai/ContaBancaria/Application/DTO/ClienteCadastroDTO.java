@@ -4,6 +4,7 @@ import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public record ClienteCadastroDTO(
         String nomeCompleto,
@@ -11,11 +12,17 @@ public record ClienteCadastroDTO(
         ContaResumoDTO contaDTO
 ) {
     public ClienteEntity toEntity() {
-        return ClienteEntity.builder()
+        ClienteEntity cliente = ClienteEntity.builder()
                 .ativo(true)
                 .nomeCompleto(this.nomeCompleto)
                 .cpf(this.cpf)
-                .contas(new ArrayList<ContaEntity>())
                 .build();
+
+        ContaEntity conta = contaDTO.toEntity(cliente);
+
+        cliente.setContas(List.of(conta)); // ou adicionar manualmente
+
+        return cliente;
     }
+
 }
