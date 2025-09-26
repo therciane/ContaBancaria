@@ -4,7 +4,6 @@ import com.senai.ContaBancaria.Application.DTO.ClienteCadastroDTO;
 import com.senai.ContaBancaria.Application.DTO.ClienteResponseDTO;
 import com.senai.ContaBancaria.Application.Service.ClienteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +32,12 @@ public class ClienteController {
 
         return ResponseEntity.ok(service.listarClientesAtivos());
     }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<ClienteResponseDTO> buscarClienteAtivoPorCpf(@PathVariable String cpf){ //Caminho que será passado na URL (endpoint)
+        return ResponseEntity.ok(service.buscarClienteAtivoPorCpf(cpf));
+    }
+
+
 
 }

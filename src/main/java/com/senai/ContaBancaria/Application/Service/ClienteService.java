@@ -42,4 +42,10 @@ public class ClienteService {
                 .map(ClienteResponseDTO::fromEntity)
                 .toList();
     }
+
+    public ClienteResponseDTO buscarClienteAtivoPorCpf(String cpf) {
+        var cliente = repository.findByCpfAndAtivoTrue(cpf) //Aqui dispensa o uso de if e else, já que se ele não encontrar, já lança a exceção
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        return ClienteResponseDTO.fromEntity(cliente);
+    }
 }
