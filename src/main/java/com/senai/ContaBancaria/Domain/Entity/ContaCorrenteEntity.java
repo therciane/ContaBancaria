@@ -23,4 +23,19 @@ public class ContaCorrenteEntity extends ContaEntity{
     public String getTipoConta() {
         return "CORRENTE";
     }
+
+    @Override
+    public void sacar(BigDecimal valor) {
+        validarValorMaiorQueZero(valor);
+
+        BigDecimal custoSaque = valor.multiply(this.taxa);
+        BigDecimal totalSaque = valor.add(custoSaque);
+
+        // Aqui, permitimos que o saldo fique negativo até o limite definido
+        if (this.getSaldo().add(this.limite).compareTo(totalSaque) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente para saque, considerando o limite.");
+        }
+
+        this.setSaldo(this.getSaldo().subtract(valor));
+    }
 }
