@@ -2,8 +2,8 @@ package com.senai.ContaBancaria.Application.Service;
 
 import com.senai.ContaBancaria.Application.DTO.ContaAutualizacao;
 import com.senai.ContaBancaria.Application.DTO.ContaResumoDTO;
-import com.senai.ContaBancaria.Application.DTO.transferenciaDTO;
-import com.senai.ContaBancaria.Application.DTO.valorSaqueDepositoDTO;
+import com.senai.ContaBancaria.Application.DTO.TransferenciaDTO;
+import com.senai.ContaBancaria.Application.DTO.ValorSaqueDepositoDTO;
 import com.senai.ContaBancaria.Domain.Entity.ContaCorrenteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaPoupancaEntity;
@@ -74,14 +74,14 @@ public class ContaService {
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
-    public ContaResumoDTO depositar(String numeroDaConta, valorSaqueDepositoDTO dto) {
+    public ContaResumoDTO depositar(String numeroDaConta, ValorSaqueDepositoDTO dto) {
         var conta = buscaContaAtivaPorNumero(numeroDaConta);
         conta.depositar(dto);
 
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
-    public ContaResumoDTO transferir(String numeroDaConta, transferenciaDTO dto) {
+    public ContaResumoDTO transferir(String numeroDaConta, TransferenciaDTO dto) {
 
         var contaOrigem = buscaContaAtivaPorNumero(numeroDaConta);
         var contaDestino = buscaContaAtivaPorNumero(dto.contaDestino());

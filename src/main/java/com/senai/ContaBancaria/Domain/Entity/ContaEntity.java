@@ -1,6 +1,5 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
-import com.senai.ContaBancaria.Application.DTO.valorSaqueDepositoDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

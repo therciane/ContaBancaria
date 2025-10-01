@@ -2,7 +2,7 @@ package com.senai.ContaBancaria.Application.DTO;
 
 import java.math.BigDecimal;
 
-public record valorSaqueDepositoDTO(
+public record ValorSaqueDepositoDTO(
         BigDecimal valor
 ) {
 }

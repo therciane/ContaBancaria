@@ -1,14 +1,13 @@
 package com.senai.ContaBancaria.Interface_UI.Controller;
 
 import com.senai.ContaBancaria.Application.DTO.ContaResumoDTO;
-import com.senai.ContaBancaria.Application.DTO.transferenciaDTO;
-import com.senai.ContaBancaria.Application.DTO.valorSaqueDepositoDTO;
+import com.senai.ContaBancaria.Application.DTO.TransferenciaDTO;
+import com.senai.ContaBancaria.Application.DTO.ValorSaqueDepositoDTO;
 import com.senai.ContaBancaria.Application.Service.ContaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -41,17 +40,17 @@ public class ContaController {
     }
 
     @PostMapping("/{numeroDaConta}/sacar")
-    public ResponseEntity<ContaResumoDTO> sacar(@PathVariable String numeroDaConta, @RequestBody valorSaqueDepositoDTO dto) {
+    public ResponseEntity<ContaResumoDTO> sacar(@PathVariable String numeroDaConta, @RequestBody ValorSaqueDepositoDTO dto) {
         return ResponseEntity.ok(service.sacar(numeroDaConta, dto.valor()));
     }
 
     @PostMapping("/{numeroDaConta}/depositar")
-    public ResponseEntity<ContaResumoDTO> depositar(@PathVariable String numeroDaConta, @RequestBody valorSaqueDepositoDTO dto) {
+    public ResponseEntity<ContaResumoDTO> depositar(@PathVariable String numeroDaConta, @RequestBody ValorSaqueDepositoDTO dto) {
         return ResponseEntity.ok(service.depositar(numeroDaConta, dto.valor()));
     }
 
     @PostMapping("/{numeroDaConta}/transferir/")
-    public ResponseEntity <ContaResumoDTO> transferir(@PathVariable String numeroDaConta, @RequestBody transferenciaDTO dto) {
+    public ResponseEntity <ContaResumoDTO> transferir(@PathVariable String numeroDaConta, @RequestBody TransferenciaDTO dto) {
         return ResponseEntity.ok(service.transferir(numeroDaConta, dto));
     }
 }
