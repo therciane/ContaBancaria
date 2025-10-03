@@ -3,10 +3,11 @@ package com.senai.ContaBancaria.Application.Service;
 import com.senai.ContaBancaria.Application.DTO.ContaAutualizacao;
 import com.senai.ContaBancaria.Application.DTO.ContaResumoDTO;
 import com.senai.ContaBancaria.Application.DTO.TransferenciaDTO;
-import com.senai.ContaBancaria.Application.DTO.ValorSaqueDepositoDTO;
 import com.senai.ContaBancaria.Domain.Entity.ContaCorrenteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaPoupancaEntity;
+import com.senai.ContaBancaria.Domain.Exceptions.EntidadeNaoEncontradaException;
+import com.senai.ContaBancaria.Domain.Exceptions.RendimentoInvalidoException;
 import com.senai.ContaBancaria.Domain.Repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class ContaService {
     public ContaResumoDTO buscarContaPorNumero(String numero) {
         return ContaResumoDTO.fromEntity(
                 repository.findByNumeroAndAtivaTrue(numero)
-                        .orElseThrow(() -> new RuntimeException("Conta não encontrada"))
+                        .orElseThrow(() -> new EntidadeNaoEncontradaException("Conta"))
         );
     }
 
@@ -62,7 +63,7 @@ public class ContaService {
     //Metodo para evitar repetição de código = clean code
     private ContaEntity buscaContaAtivaPorNumero(String numeroDaConta) {
         var conta = repository.findByNumeroAndAtivaTrue(numeroDaConta)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Conta"));
         return conta;
     }
 
@@ -72,9 +73,9 @@ public class ContaService {
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
-    public ContaResumoDTO depositar(String numeroDaConta, ValorSaqueDepositoDTO dto) {
+    public ContaResumoDTO depositar(String numeroDaConta, BigDecimal dto) {
         var conta = buscaContaAtivaPorNumero(numeroDaConta);
-        conta.depositar(dto.valor());
+        conta.depositar(dto);
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
@@ -92,6 +93,6 @@ public class ContaService {
             poupanca.aplicarRendimento();
             return ContaResumoDTO.fromEntity(repository.save(conta));
         }
-        throw new IllegalArgumentException("Rendimento apenas para conta poupança");
+        throw new RendimentoInvalidoException();
     }
 }

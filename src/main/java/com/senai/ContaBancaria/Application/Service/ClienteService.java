@@ -61,7 +61,7 @@ public class ClienteService {
 
     public void deletarCliente(String cpf) {
         var cliente = repository.findByCpfAndAtivoTrue(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado")); //Só deleta caso o o cliente pedir, caso contrário ele constinua inativo
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado")); //Só deleta caso o cliente pedir, caso contrário ele constinua inativo
 
         cliente.setAtivo(false);
         cliente.getContas().forEach(c -> c.setAtivo(false));

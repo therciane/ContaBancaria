@@ -1,5 +1,6 @@
 package com.senai.ContaBancaria.Interface_UI.Controller;
 
+import com.senai.ContaBancaria.Application.DTO.ContaAutualizacao;
 import com.senai.ContaBancaria.Application.DTO.ContaResumoDTO;
 import com.senai.ContaBancaria.Application.DTO.TransferenciaDTO;
 import com.senai.ContaBancaria.Application.DTO.ValorSaqueDepositoDTO;
@@ -28,8 +29,8 @@ public class ContaController {
     }
 
     @PutMapping("{numeroDaConta}")
-    public ResponseEntity <ContaResumoDTO> atualizarConta(@PathVariable String numeroDaConta, @RequestBody ContaResumoDTO contaResumoDTO) {
-        return ResponseEntity.ok(service.atualizarConta(numeroDaConta, contaResumoDTO));
+    public ResponseEntity <ContaResumoDTO> atualizarConta(@PathVariable String numeroDaConta, @RequestBody ContaAutualizacao dto) {
+        return ResponseEntity.ok(service.atualizarConta(numeroDaConta, dto));
     }
 
     @DeleteMapping("/{numeroDaConta}")

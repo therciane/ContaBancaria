@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-@RestController //Cuida das requisições HTTP.Avisa que a classe é um controlador
+@RestController //Cuida das requisições HTTP. Avisa que a classe é um controlador
 @RequestMapping("/api/clientes") //Mapeia a rota
 @RequiredArgsConstructor     //Gera um construtor com 1 parâmetro para cada campo final
 @Transactional
