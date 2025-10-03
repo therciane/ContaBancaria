@@ -19,6 +19,8 @@ public record ContaResumoDTO(
                     .saldo(this.saldo)
                     .ativo(true)
                     .cliente(cliente)
+                    .limite(new BigDecimal("500.00"))
+                    .taxa(new BigDecimal("0.05"))
                     .build();
 
         } else if ("POUPANCA".equalsIgnoreCase(tipoConta)) {
@@ -27,6 +29,7 @@ public record ContaResumoDTO(
                     .saldo(this.saldo)
                     .ativo(true)
                     .cliente(cliente)
+                    .rendimento(new BigDecimal("0.01"))
                     .build();
         }
         return null;

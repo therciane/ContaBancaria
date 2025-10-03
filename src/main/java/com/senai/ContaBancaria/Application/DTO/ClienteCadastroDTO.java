@@ -12,17 +12,12 @@ public record ClienteCadastroDTO(
         ContaResumoDTO contaDTO
 ) {
     public ClienteEntity toEntity() {
-        ClienteEntity cliente = ClienteEntity.builder()
+        return ClienteEntity.builder()
                 .ativo(true)
                 .nomeCompleto(this.nomeCompleto)
                 .cpf(this.cpf)
+                .contas(new ArrayList<ContaEntity>())
                 .build();
-
-        ContaEntity conta = contaDTO.toEntity(cliente);
-
-        cliente.setContas(List.of(conta)); // ou adicionar manualmente
-
-        return cliente;
     }
 
 }

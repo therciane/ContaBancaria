@@ -14,6 +14,7 @@ public record ClienteResponseDTO(
         List<ContaResumoDTO> contas = cliente.getContas().stream()
                 .map(ContaResumoDTO::fromEntity)
                 .toList();
+
         return new ClienteResponseDTO(
                 cliente.getId(),
                 cliente.getNomeCompleto(),

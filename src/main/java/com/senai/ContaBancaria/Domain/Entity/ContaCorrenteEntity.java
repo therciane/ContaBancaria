@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true) //Gera equals e hashcode considerando a superclasse
 @SuperBuilder
 public class ContaCorrenteEntity extends ContaEntity{
-    @Column(nullable = false, precision = 19, scale = 3)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal limite;
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal taxa;

@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ContaService {
+
     private final ContaRepository repository;
 
     @Transactional(readOnly = true)
@@ -46,9 +47,7 @@ public class ContaService {
         } else if (conta instanceof ContaCorrenteEntity corrente) {
             corrente.setLimite(dto.limite());
             corrente.setTaxa(dto.taxa());
-
         }
-
         conta.setSaldo(dto.saldo());
 
         return ContaResumoDTO.fromEntity(repository.save(conta));
@@ -70,26 +69,29 @@ public class ContaService {
     public ContaResumoDTO sacar(String numeroDaConta, BigDecimal valor) {
         var conta = buscaContaAtivaPorNumero(numeroDaConta);
         conta.sacar(valor);
-
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
     public ContaResumoDTO depositar(String numeroDaConta, ValorSaqueDepositoDTO dto) {
         var conta = buscaContaAtivaPorNumero(numeroDaConta);
-        conta.depositar(dto);
-
+        conta.depositar(dto.valor());
         return ContaResumoDTO.fromEntity(repository.save(conta));
     }
 
     public ContaResumoDTO transferir(String numeroDaConta, TransferenciaDTO dto) {
-
         var contaOrigem = buscaContaAtivaPorNumero(numeroDaConta);
         var contaDestino = buscaContaAtivaPorNumero(dto.contaDestino());
-
         contaOrigem.transferir(dto.valor(), contaDestino);
         repository.save(contaDestino);
         return ContaResumoDTO.fromEntity(repository.save(contaOrigem));
     }
 
-
+    public ContaResumoDTO aplicarRendimento(String numeroDaConta) {
+        var conta = buscaContaAtivaPorNumero(numeroDaConta);
+        if(conta instanceof ContaPoupancaEntity poupanca){
+            poupanca.aplicarRendimento();
+            return ContaResumoDTO.fromEntity(repository.save(conta));
+        }
+        throw new IllegalArgumentException("Rendimento apenas para conta poupança");
+    }
 }

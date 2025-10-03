@@ -23,10 +23,10 @@ public abstract class ContaEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String numeroConta; //Associação de informações.
 
-    @Column(nullable = false, precision = 4, scale = 2)
+    @Column(nullable = false, precision = 20, scale = 2)
     private BigDecimal saldo; //BigDecimal para números decimais, como dinheiro
 
     @Column(nullable = false)
