@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContaRepository extends JpaRepository<ContaEntity, String> {
-    List <ContaEntity> findAllByAtivaTrue();
+    List <ContaEntity> findAllByAtivoTrue();
 
-    Optional <ContaEntity> findByNumeroAndAtivaTrue(String numero);
+    Optional <ContaEntity> findByNumeroAndAtivoTrue(String numero);
 }

@@ -16,7 +16,7 @@ public record ContaResumoDTO(
     public ContaEntity toEntity(ClienteEntity cliente) {
         if ("CORRENTE".equalsIgnoreCase(tipoConta)) {
             return ContaCorrenteEntity.builder()
-                    .numeroConta(this.numeroConta)
+                    .numero(this.numeroConta)
                     .saldo(this.saldo)
                     .ativo(true)
                     .cliente(cliente)
@@ -26,7 +26,7 @@ public record ContaResumoDTO(
 
         } else if ("POUPANCA".equalsIgnoreCase(tipoConta)) {
             return ContaPoupancaEntity.builder()
-                    .numeroConta(this.numeroConta)
+                    .numero(this.numeroConta)
                     .saldo(this.saldo)
                     .ativo(true)
                     .cliente(cliente)
@@ -38,7 +38,7 @@ public record ContaResumoDTO(
 
     public static ContaResumoDTO fromEntity(ContaEntity c) {
         return new ContaResumoDTO(
-                c.getNumeroConta(),
+                c.getNumero(),
                 c.getTipoConta(),
                 c.getSaldo()
         );

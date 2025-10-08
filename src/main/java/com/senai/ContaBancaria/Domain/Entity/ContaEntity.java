@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) //Ela é uma herança, que usamos quando haverá uma tabela. Parrecido com a MappedSuperClass
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING, length = 20) //Discrimina o tipo de classe que estu salvando
+@DiscriminatorColumn(name = "tipo_conta", discriminatorType = DiscriminatorType.STRING, length = 20) //Discrimina o tipo de classe que estu salvando
 @Table(
         name = "conta",
         uniqueConstraints = { @UniqueConstraint(name = "uk_conta_numero", columnNames = "numero"),
@@ -27,7 +27,7 @@ public abstract class ContaEntity {
     private String id;
 
     @Column(nullable = false, length = 20)
-    private String numeroConta; //Associação de informações.
+    private String numero; //Associação de informações.
 
     @Column(nullable = false, precision = 20, scale = 2)
     private BigDecimal saldo; //BigDecimal para números decimais, como dinheiro

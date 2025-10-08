@@ -27,7 +27,7 @@ public class ContaService {
 
     @Transactional(readOnly = true)
     public List<ContaResumoDTO> listarTodasContas() {
-        return repository.findAllByAtivaTrue().stream()
+        return repository.findAllByAtivoTrue().stream()
                 .map(ContaResumoDTO::fromEntity)
                 .toList();
     }
@@ -35,7 +35,7 @@ public class ContaService {
     @Transactional(readOnly = true)
     public ContaResumoDTO buscarContaPorNumero(String numero) {
         return ContaResumoDTO.fromEntity(
-                repository.findByNumeroAndAtivaTrue(numero)
+                repository.findByNumeroAndAtivoTrue(numero)
                         .orElseThrow(() -> new EntidadeNaoEncontradaException("Conta"))
         );
     }
@@ -62,7 +62,7 @@ public class ContaService {
 
     //Metodo para evitar repetição de código = clean code
     private ContaEntity buscaContaAtivaPorNumero(String numeroDaConta) {
-        var conta = repository.findByNumeroAndAtivaTrue(numeroDaConta)
+        var conta = repository.findByNumeroAndAtivoTrue(numeroDaConta)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Conta"));
         return conta;
     }
