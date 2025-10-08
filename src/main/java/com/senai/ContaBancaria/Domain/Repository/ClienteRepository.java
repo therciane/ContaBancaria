@@ -3,7 +3,6 @@ package com.senai.ContaBancaria.Domain.Repository;
 import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -4,13 +4,13 @@ import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public record ClienteCadastroDTO(
         String nomeCompleto,
         String cpf,
         ContaResumoDTO contaDTO
 ) {
+
     public ClienteEntity toEntity() {
         return ClienteEntity.builder()
                 .ativo(true)

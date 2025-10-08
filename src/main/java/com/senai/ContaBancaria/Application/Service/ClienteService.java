@@ -2,6 +2,9 @@ package com.senai.ContaBancaria.Application.Service;
 
 import com.senai.ContaBancaria.Application.DTO.ClienteCadastroDTO;
 import com.senai.ContaBancaria.Application.DTO.ClienteResponseDTO;
+import com.senai.ContaBancaria.Domain.Entity.ClienteEntity;
+import com.senai.ContaBancaria.Domain.Exceptions.ContaMesmoTipoException;
+import com.senai.ContaBancaria.Domain.Exceptions.EntidadeNaoEncontradaException;
 import com.senai.ContaBancaria.Domain.Repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,7 @@ public class ClienteService {
                 .anyMatch(c -> c.getClass().equals(novaConta.getClass()) && c.isAtivo());
 
         if(jaTemTipo)
-            throw new RuntimeException("Cliente já possui uma conta ativa deste tipo.");
+            throw new ContaMesmoTipoException();
 
         cliente.getContas().add(novaConta);
 
@@ -44,14 +47,12 @@ public class ClienteService {
     }
 
     public ClienteResponseDTO buscarClienteAtivoPorCpf(String cpf) {
-        var cliente = repository.findByCpfAndAtivoTrue(cpf) //Aqui dispensa o uso de if e else, já que se ele não encontrar, já lança a exceção
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        var cliente = buscarPorCpfClienteAtivo(cpf);
         return ClienteResponseDTO.fromEntity(cliente);
     }
 
     public ClienteResponseDTO atualizarCliente(String cpf, ClienteCadastroDTO dto) {
-        var cliente = repository.findByCpfAndAtivoTrue(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        var cliente = buscarPorCpfClienteAtivo(cpf);
 
         cliente.setNomeCompleto(dto.nomeCompleto());
         cliente.setCpf(dto.cpf());
@@ -60,12 +61,17 @@ public class ClienteService {
     }
 
     public void deletarCliente(String cpf) {
-        var cliente = repository.findByCpfAndAtivoTrue(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado")); //Só deleta caso o cliente pedir, caso contrário ele constinua inativo
+        var cliente = buscarPorCpfClienteAtivo(cpf);
 
         cliente.setAtivo(false);
         cliente.getContas().forEach(c -> c.setAtivo(false));
 
         repository.save(cliente);
+    }
+
+    private ClienteEntity buscarPorCpfClienteAtivo(String cpf) {
+        var cliente = repository.findByCpfAndAtivoTrue(cpf)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Cliente")); //Só deleta caso o cliente pedir, caso contrário ele constinua inativo
+        return cliente;
     }
 }
