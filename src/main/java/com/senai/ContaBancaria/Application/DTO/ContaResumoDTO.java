@@ -5,12 +5,24 @@ import com.senai.ContaBancaria.Domain.Entity.ContaCorrenteEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaPoupancaEntity;
 import com.senai.ContaBancaria.Domain.Exceptions.TipoDeContaInvalidaException;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public record ContaResumoDTO(
+        @NotNull(message = "Este espaço é obrigatório")
+        @Size (min = 8, max = 12, message = "O numero da conta, deve possuir entre 8 e 12 números.")
+        @Pattern(regexp = "\\d+", message = "O número da conta deve conter apenas dígitos numéricos.")
+        @Column(nullable = false, length = 12, unique = true)
         String numeroConta,
+
+        @NotBlank(message = "O tipo da sua conta é obrigatório")
         String tipoConta,
+
+        @NotNull(message = "O saldo não pode ser negativo e/ou ficar em branco")
+        @DecimalMin(value = "0.0", inclusive = true)
+        @Column(nullable = false)
         BigDecimal saldo
 ) {
     public ContaEntity toEntity(ClienteEntity cliente) {
