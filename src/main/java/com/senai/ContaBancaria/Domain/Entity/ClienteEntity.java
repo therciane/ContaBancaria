@@ -19,7 +19,7 @@ import java.util.List;
         uniqueConstraints = @UniqueConstraint(name = "uk_cliente_cpf", columnNames = "cpf") //Chave unica impedindo nomes iuais
 
 )
-public class ClienteEntity {
+public class ClienteEntity extends Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -1,5 +1,6 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
+import com.senai.ContaBancaria.Domain.Enum.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import javax.management.relation.Role;
 
 @Getter
 @Setter
@@ -17,14 +17,14 @@ import javax.management.relation.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED) //banco de dados
-public class UsuarioEnity {
+public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     protected String id;
 
     @NotBlank
     @Column(nullable = false)
-    protected String nome;
+    protected String nomeCompleto;
 
     @NotBlank
     @Column(nullable = false, unique = true, length = 14)
