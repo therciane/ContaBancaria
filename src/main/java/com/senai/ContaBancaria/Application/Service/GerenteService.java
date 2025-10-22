@@ -17,7 +17,7 @@ public class GerenteService {
 
     private final PasswordEncoder encoder;
 
-    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERENTE')")
     public List<GerenteDTO> listarTodosGerentes() {
         return gerenteRepository.findAll().stream()
                 .map(GerenteDTO::fromEntity)
