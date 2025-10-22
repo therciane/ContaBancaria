@@ -34,7 +34,7 @@ public record GerenteDTO(
                 .email(this.email)
                 .senha(this.senha)
                 .ativo(this.ativo != null ? this.ativo : true)
-                .role(this.role != null ? this.role : Role.PROFESSOR)
+                .role(this.role != null ? this.role : Role.GERENTE)
                 .build();
     }
 
