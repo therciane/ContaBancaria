@@ -26,7 +26,7 @@ public class GerenteService {
 
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public GerenteDTO cadastrarProfessor(GerenteDTO dto) {
+    public GerenteDTO cadastrarGerentes(GerenteDTO dto) {
         GerenteEnity entity = dto.toEntity();
         entity.setSenha(encoder.encode(dto.senha()));
         entity.setRole(Role.GERENTE);
