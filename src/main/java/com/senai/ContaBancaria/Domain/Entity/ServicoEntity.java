@@ -1,5 +1,6 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
+import com.senai.ContaBancaria.Domain.Exceptions.ValidacaoException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

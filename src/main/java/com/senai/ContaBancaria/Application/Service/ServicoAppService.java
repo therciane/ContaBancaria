@@ -5,7 +5,6 @@ import com.senai.ContaBancaria.Domain.Entity.ServicoEntity;
 import com.senai.ContaBancaria.Domain.Exceptions.EntidadeNaoEncontradaException;
 import com.senai.ContaBancaria.Domain.Repository.ServicoRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
