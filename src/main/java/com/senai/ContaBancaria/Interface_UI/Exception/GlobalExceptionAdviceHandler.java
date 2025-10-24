@@ -214,18 +214,6 @@ public class GlobalExceptionAdviceHandler {
         );
     }
 
-    @ExceptionHandler(ValidacaoException.class)
-    public ResponseEntity<?> handleValidacao(ValidacaoException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidacaoBean(MethodArgumentNotValidException ex) {
-        Map<String, String> erros = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(e -> erros.put(e.getField(), e.getDefaultMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
-    }
-
     @ExceptionHandler(UsuarioNaoEncontradoException.class)
     public ProblemDetail handleUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex, HttpServletRequest request) {
         return buildProblem(
