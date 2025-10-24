@@ -36,6 +36,7 @@ public class ServicoController {
                             schema = @Schema(implementation = ServicoDTO.class),
                             examples = @ExampleObject(name = "Exemplo válido", value = """
                                         {
+                                          "Número da Conta": "123456",
                                           "tipo de conta": "Conta Poupança",
                                           "saldo": 500.0
                                         }
@@ -51,8 +52,10 @@ public class ServicoController {
                             content = @Content(
                                     mediaType = "application/json",
                                     examples = {
-                                            @ExampleObject(name = "Preço inválido", value = "\"Preço mínimo do serviço deve ser R$ 50,00\""),
-                                            @ExampleObject(name = "Duração excedida", value = "\"Duração do serviço não pode exceder 30 dias\"")
+                                            @ExampleObject(name = "saldo inválido", value = "\"saldo mínimo do serviço deve ser R$ 1,00 R$\""),
+                                            @ExampleObject(name = "Conta Inexistente", value = "\"Sua Conta não existe, por favor entrar em contato com o suporte \""),
+                                            @ExampleObject(name = "Conta Duplicada", value = "\"Sua foi duplicada\""),
+                                            @ExampleObject(name = "", value = "\".\"")
                                     }
                             )
                     )
@@ -83,7 +86,7 @@ public class ServicoController {
             summary = "Buscar serviço por ID",
             description = "Retorna um serviço existente a partir do seu ID",
             parameters = {
-                    @Parameter(name = "id", description = "ID do serviço a ser buscado", example = "1")
+                    @Parameter(name = "id", description = "ID da conta a ser buscado", example = "1")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Serviço encontrado"),
@@ -92,7 +95,7 @@ public class ServicoController {
                             description = "Serviço não encontrado",
                             content = @Content(
                                     mediaType = "application/json",
-                                    examples = @ExampleObject(value = "\"Serviço com ID 99 não encontrado.\"")
+                                    examples = @ExampleObject(value = "\"Conta com ID sfrtg456 não encontrado.\"")
                             )
                     )
             }
@@ -116,9 +119,7 @@ public class ServicoController {
                             examples = @ExampleObject(name = "Exemplo de atualização", value = """
                         {
                           "descricao": "Revisão completa",
-                          "preco": 200.0,
-                          "dataInicio": "2025-08-01",
-                          "dataFim": "2025-08-10"
+                          "saldo": 200.0
                         }
                     """)
                     )
@@ -131,8 +132,8 @@ public class ServicoController {
                             content = @Content(
                                     mediaType = "application/json",
                                     examples = {
-                                            @ExampleObject(name = "Preço inválido", value = "\"Preço mínimo do serviço deve ser R$ 50,00\""),
-                                            @ExampleObject(name = "Duração excedida", value = "\"Duração do serviço não pode exceder 30 dias\"")
+                                            @ExampleObject(name = "saldo inválido", value = "\"Preço mínimo do serviço deve ser R$ 1,00 R$\""),
+                                            @ExampleObject(name = "Numero da Conta", value = "\"Numero da conta invalido\"")
                                     }
                             )
                     ),
@@ -154,9 +155,9 @@ public class ServicoController {
 
     @Operation(
             summary = "Deletar um serviço",
-            description = "Remove um serviço da base de dados a partir do seu ID",
+            description = "Remove sua conta através do numero da conta",
             parameters = {
-                    @Parameter(name = "id", description = "ID do serviço a ser deletado", example = "1")
+                    @Parameter(name = "id", description = "ID da conta a ser deletada", example = "1")
             },
             responses = {
                     @ApiResponse(responseCode = "204", description = "Serviço removido com sucesso"),
