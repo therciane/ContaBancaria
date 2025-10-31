@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @SuperBuilder
-@Table (name = "pgamento")
+@Table (name = "pagamento")
 @DiscriminatorValue("PAGAMENTO")
 
 public class PagamentoEntity extends ContaEntity {
