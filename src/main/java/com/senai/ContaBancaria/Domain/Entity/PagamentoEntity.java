@@ -34,10 +34,13 @@ public class PagamentoEntity extends ContaEntity {
     private LocalDate dataPagamento;
 
     @Column (nullable = false)
-    private Boolean status;
+    private Boolean status; //criar ENUM
+
+    private String TaxaEntity;
 
     @Override
     public String getTipoConta() {
         return "PAGAMENTO";
     }
+
 }
