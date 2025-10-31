@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @SuperBuilder
-@Table(name = "Taxa")
+@Table(name = "taxa")
 @DiscriminatorValue("TAXA")
 
 public class TaxaEntity extends ContaEntity {
