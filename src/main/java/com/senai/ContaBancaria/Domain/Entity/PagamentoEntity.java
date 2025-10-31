@@ -1,25 +1,29 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @SuperBuilder
 @Table (name = "pagamento")
 @DiscriminatorValue("PAGAMENTO")
 
-public class PagamentoEntity extends ContaEntity {
+public class PagamentoEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    @ManyToOne
+    private ContaEntity conta;
+
     @NotNull
     @Column (nullable = false, length = 48) //tamanho de um codigo de barras de um boleto comum no Brasil
     private String boleto;
@@ -31,16 +35,11 @@ public class PagamentoEntity extends ContaEntity {
 
     @Column (name = "data_pagamento")
     @NotNull
-    private LocalDate dataPagamento;
+    private LocalDateTime data;
 
     @Column (nullable = false)
-    private Boolean status; //criar ENUM
+    private StatusPagamento statusPagamento; //criar ENUM
 
     private String TaxaEntity;
-
-    @Override
-    public String getTipoConta() {
-        return "PAGAMENTO";
-    }
 
 }
