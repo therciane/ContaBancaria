@@ -2,40 +2,37 @@ package com.senai.ContaBancaria.Application.DTO;
 
 import com.senai.ContaBancaria.Domain.Entity.*;
 import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema
+
 public record PagamentoDTO(
-            String id,
-            ContaResumoDTO conta,
+            ContaEntity conta,
             String boleto,
             BigDecimal valorPago,
-            LocalDateTime dataPagamento,
+            LocalDateTime data,
             StatusPagamento statusPagamento
 ) {
 
-    public PagamentoDTO fromEntity(PagamentoEntity pagamento, ContaResumoDTO conta) {
+    public PagamentoDTO fromEntity(PagamentoEntity pagamento) {
         return new PagamentoDTO(
-                pagamento.getId(),
                 conta,
                 pagamento.getBoleto(),
                 pagamento.getValorPago(),
-                pagamento.getStatusPagamento(),
+                pagamento.getData(),
                 pagamento.getStatusPagamento()
         );
     }
 
     public PagamentoEntity toEntity(){
         return PagamentoEntity.builder()
-                .id(id)
                 .conta(conta)
                 .boleto(boleto)
                 .valorPago(valorPago)
-                .dataPagamento(dataPagamento)
-                .statusPagamento(statusPagamento);
-
+                .data(data)
+                .statusPagamento(this.statusPagamento != null ? this.statusPagamento : StatusPagamento.PENDENTE)
+                .build();
     }
 }

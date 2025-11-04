@@ -1,5 +1,6 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
+import com.senai.ContaBancaria.Domain.Enum.Descricao;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ public class TaxaEntity extends ContaEntity {
 
     @NotBlank
     @Column (name = "descricao", nullable = false, length = 100)
-    private String descricao;
+    private Descricao descricao;
 
     @DecimalMin("0.0")
     @NotNull
@@ -31,7 +32,7 @@ public class TaxaEntity extends ContaEntity {
     private BigDecimal percentual;
 
     @Column(name = "valor_fixo", precision = 10, scale = 2)
-    private BigDecimal valorFixo = BigDecimal.valueOf(0.12);
+    private BigDecimal valorFixo;
 
     @Override
     public String getTipoConta() {
