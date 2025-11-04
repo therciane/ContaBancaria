@@ -3,23 +3,49 @@ package com.senai.ContaBancaria.Application.DTO;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
 import com.senai.ContaBancaria.Domain.Enum.Descricao;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import java.math.BigDecimal;
 
+@Schema(
+        name = "TaxaDTO",
+        description = "DTO para transportar informações de Taxas"
+)
+
+@Builder
 public record TaxaDTO(
-        String id,
+
+        @NotNull
         ContaEntity conta,
+
+        @NotBlank
         Descricao descricao,
+
+        @NotNull
+        @DecimalMin(value = "0.0", inclusive = false, message = "O percentual deve ser maior que zero.")
         BigDecimal percentual,
+
+        @NotNull
         BigDecimal valorFixo
 ) {
 
     public TaxaDTO fromEntity(TaxaEntity taxa) {
         return new TaxaDTO(
-                taxa.getId(),
                 conta,
                 taxa.getDescricao(),
                 taxa.getPercentual(),
                 taxa.getValorFixo()
         );
+    }
+
+    public TaxaEntity toEntity(){
+        return TaxaEntity.builder()
+                .descricao(descricao)
+                .percentual(percentual)
+                .valorFixo(valorFixo)
+                .build();
     }
 }
