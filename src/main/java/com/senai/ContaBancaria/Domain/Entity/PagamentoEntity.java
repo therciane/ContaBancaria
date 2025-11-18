@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Table (name = "pagamento")
 @DiscriminatorValue("PAGAMENTO")
-
 public class PagamentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +39,7 @@ public class PagamentoEntity {
     @Column (nullable = false)
     private StatusPagamento statusPagamento; //criar ENUM
 
+    @ManyToMany(fetch = FetchType.LAZY)
     private String TaxaEntity;
 
 }

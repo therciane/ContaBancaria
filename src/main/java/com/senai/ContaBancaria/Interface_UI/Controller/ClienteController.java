@@ -31,7 +31,6 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity <List <ClienteResponseDTO>> listarClientesAtivos(){
-
         return ResponseEntity.ok(service.listarClientesAtivos());
     }
 

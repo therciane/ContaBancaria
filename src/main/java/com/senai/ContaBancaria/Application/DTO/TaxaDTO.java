@@ -44,7 +44,7 @@ public record TaxaDTO(
     public TaxaEntity toEntity(){
         return TaxaEntity.builder()
                 .descricao(descricao)
-                .percentual(percentual)
+                .percentual(new BigDecimal("3.00"))
                 .valorFixo(valorFixo)
                 .build();
     }
