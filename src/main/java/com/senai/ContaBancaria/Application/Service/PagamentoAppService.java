@@ -30,10 +30,6 @@ public class PagamentoAppService {
 
     }
 
-    public PagamentoDTO pagamentoEfetivado(){
-
-    }
-
     @GetMapping
     public List<PagamentoDTO> listarPagamentos(){
         return repository.findAll()

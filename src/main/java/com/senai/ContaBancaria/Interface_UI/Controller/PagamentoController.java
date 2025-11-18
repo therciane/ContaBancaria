@@ -26,7 +26,7 @@ public class PagamentoController {
     }
 
     public ResponseEntity<PagamentoDTO> efetivarPagamento(@RequestBody PagamentoEntity dto){
-        return ResponseEntity.ok(appService.pagamentoEfetivado());
+        return ResponseEntity.ok(domainService.pagamentoEfetivado());
     }
 
     public ResponseEntity<PagamentoEntity> buscarPagamentoPorId(@RequestBody PagamentoDTO dto){
