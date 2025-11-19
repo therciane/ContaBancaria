@@ -28,18 +28,18 @@ public class TaxaController {
         return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<TaxaDTO> buscar(@PathVariable String id){
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<TaxaDTO> atualizar(@RequestBody TaxaDTO dto, @PathVariable String id, @PathVariable BigDecimal valor){
         return ResponseEntity.ok(service.atualizar(id, valor, dto));
     }
 
-    @DeleteMapping
-    public ResponseEntity<TaxaDTO> deletar(@PathVariable String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable String id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
