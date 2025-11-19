@@ -21,17 +21,15 @@ public class PagamentoAppService {
     private final PagamentoDTO dto;
     private final PagamentoRepository repository;
 
-    public PagamentoAppService (PagamentoRepository repository, PagamentoDTO pgdto) {
-        this.repository = repository;
-        this.dto = pgdto;
-    }
-
-    public PagamentoDTO realizarPagamento(){
-
-    }
-
     @GetMapping
     public List<PagamentoDTO> listarPagamentos(){
+        return repository.findAll()
+                .stream()
+                .map(dto::fromEntity)
+                .toList();
+    }
+
+    public List <PagamentoDTO> listarBoletosAPagar(){
         return repository.findAll()
                 .stream()
                 .map(dto::fromEntity)

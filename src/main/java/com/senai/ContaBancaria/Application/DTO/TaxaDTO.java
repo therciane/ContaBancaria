@@ -18,9 +18,6 @@ import java.math.BigDecimal;
 @Builder
 public record TaxaDTO(
 
-        @NotNull
-        ContaEntity conta,
-
         @NotBlank
         Descricao descricao,
 
@@ -32,9 +29,8 @@ public record TaxaDTO(
         BigDecimal valorFixo
 ) {
 
-    public TaxaDTO fromEntity(TaxaEntity taxa) {
+    public static TaxaDTO fromEntity(TaxaEntity taxa) {
         return new TaxaDTO(
-                conta,
                 taxa.getDescricao(),
                 taxa.getPercentual(),
                 taxa.getValorFixo()
