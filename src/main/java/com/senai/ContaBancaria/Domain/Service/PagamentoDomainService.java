@@ -21,6 +21,9 @@ public class PagamentoDomainService {
     public PagamentoDTO cancelarFaturaSaldoInsuficiente(){ //caso o saldo for insuficiente para realizar a operação, ele cancela
 
     }
+
+    public PagamentoDTO listarPagamentos() {
+    }
 }
 
 //fará aplicação da Taxa, as suas regras de negócio

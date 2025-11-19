@@ -36,4 +36,6 @@ public class PagamentoAppService {
                 .toList();
     }
 
+    public void deletar(String id) {
+    }
 }

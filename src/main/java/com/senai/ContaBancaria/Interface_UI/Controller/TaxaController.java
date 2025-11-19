@@ -4,6 +4,7 @@ import com.senai.ContaBancaria.Application.DTO.TaxaDTO;
 import com.senai.ContaBancaria.Application.Service.TaxaAppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/taxas")
 @RequiredArgsConstructor
+@Controller
 public class TaxaController {
 
     private final TaxaAppService service;
