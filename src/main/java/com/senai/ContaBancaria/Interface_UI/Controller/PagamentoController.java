@@ -1,6 +1,7 @@
 package com.senai.ContaBancaria.Interface_UI.Controller;
 
 import com.senai.ContaBancaria.Application.DTO.PagamentoDTO;
+import com.senai.ContaBancaria.Application.DTO.TaxaDTO;
 import com.senai.ContaBancaria.Application.Service.PagamentoAppService;
 import com.senai.ContaBancaria.Domain.Entity.PagamentoEntity;
 import com.senai.ContaBancaria.Domain.Service.PagamentoDomainService;
@@ -18,45 +19,35 @@ public class PagamentoController {
     private final PagamentoAppService appService;
     private final PagamentoDomainService domainService;
 
+    // REALIZAR PAGAMENTO
     @PostMapping
-    public ResponseEntity<PagamentoEntity> realizarPagamento(@RequestBody PagamentoDTO dto){
-        return ResponseEntity.ok(domainService.listarPagamentos(dto));
+    public ResponseEntity<PagamentoDTO> realizarPagamento(@PathVariable TaxaDTO dto) {
+        return ResponseEntity.ok(domainService.realizarPagamento(dto));
     }
 
-    @GetMapping("/efetivar")
-    public ResponseEntity<PagamentoEntity> efetivarPagamento(@RequestBody PagamentoDTO dto){
-        return ResponseEntity.ok(domainService.pagamentoEfetivado(dto));
-    }
-
-    @GetMapping("/calcularSaldo")
-    public ResponseEntity<PagamentoEntity> calcularSaldoPosPagamento(@RequestBody PagamentoDTO dto){
-        return ResponseEntity.ok(domainService.calcularValorFinalDebitado(dto));
-    }
-
-    @PostMapping("/cancelar")
-    public ResponseEntity<PagamentoEntity> cancelarPagamentoSaldoInsuficiente(@RequestBody PagamentoDTO dto){
-        return ResponseEntity.ok(domainService.cancelarFaturaSaldoInsuficiente(dto));
-    }
-
-    @GetMapping("/boletos")
-    public ResponseEntity<List <PagamentoEntity>> listarBoletos (@RequestBody PagamentoDTO dto){
-        return ResponseEntity.ok(appService.listarBoletosAPagar(dto));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<PagamentoEntity> buscarPagamentoPorId(@RequestBody PagamentoDTO dto, @PathVariable String id){
-        return ResponseEntity.ok(appService.listarPagamentos(id, dto));
-    }
-
+    // LISTAR TODOS OS PAGAMENTOS
     @GetMapping
-    public ResponseEntity<List<PagamentoEntity>> listarPagamentos(){
-        return ResponseEntity.ok(appService.listarPagamentos(dto));
+    public ResponseEntity<List<PagamentoDTO>> listarPagamentos() {
+        return ResponseEntity.ok(appService.listarPagamentos());
     }
 
+    // LISTAR BOLETOS A PAGAR (separado no teu AppService)
+    @GetMapping("/boletos")
+    public ResponseEntity<List<PagamentoDTO>> listarBoletosAPagar() {
+        return ResponseEntity.ok(appService.listarBoletosAPagar());
+    }
+
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public ResponseEntity<PagamentoDTO> buscarPorId(@PathVariable String id) {
+        return ResponseEntity.ok(appService.buscarPorId(id));
+    }
+
+    // DELETAR
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable String id) {
         appService.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
+
