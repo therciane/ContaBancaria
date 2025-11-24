@@ -223,4 +223,14 @@ public class GlobalExceptionAdviceHandler {
                 request.getRequestURI()
         );
     }
+
+    @ExceptionHandler(TaxaInvalidaException.class)
+    public ProblemDetail handleUsuarioTaxaInvalida(TaxaInvalidaException ex, HttpServletRequest request) {
+        return buildProblem(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "Essa taxa é inválida",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
 }
