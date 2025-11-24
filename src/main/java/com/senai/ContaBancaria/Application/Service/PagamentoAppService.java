@@ -35,7 +35,4 @@ public class PagamentoAppService {
                 .map(dto::fromEntity)
                 .toList();
     }
-
-    public void deletar(String id) {
-    }
 }
