@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI oficinaOpenAPI() {
+    public OpenAPI bankOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("API - Conta Bancária")
-                        .description("Cadastro e gestão de serviços de uma oficina.")
+                        .description("Gestão do Pandora Bank")
                         .version("1.0")
                         .contact(new Contact()
-                                .name("Equipe Oficina")
-                                .email("suporte@oficina.com"))
+                                .name("Equipe Pandora Bank")
+                                .email("suporte@pandorabank.com"))
                 );
     }
 

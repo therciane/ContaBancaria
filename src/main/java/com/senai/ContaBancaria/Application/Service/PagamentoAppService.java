@@ -35,4 +35,11 @@ public class PagamentoAppService {
                 .map(dto::fromEntity)
                 .toList();
     }
+
+    public PagamentoDTO buscarPorId(String id) {
+        return dto.fromEntity(
+                repository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Pagamento com ID " + id + " não encontrado."))
+        );
+    }
 }

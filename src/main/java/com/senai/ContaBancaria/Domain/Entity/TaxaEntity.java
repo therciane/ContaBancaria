@@ -26,7 +26,7 @@ public class TaxaEntity extends ContaEntity {
     @Column (name = "descricao", nullable = false, length = 100)
     private Descricao descricao;
 
-    @DecimalMin("0.0")
+    @DecimalMin("3.0")
     @NotNull
     @Column (name = "percentual", precision = 5, scale = 2)
     private BigDecimal percentual;

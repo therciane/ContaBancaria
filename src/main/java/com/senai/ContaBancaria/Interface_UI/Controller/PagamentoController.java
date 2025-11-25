@@ -21,7 +21,7 @@ public class PagamentoController {
 
     // REALIZAR PAGAMENTO
     @PostMapping
-    public ResponseEntity<PagamentoDTO> realizarPagamento(@PathVariable TaxaDTO dto) {
+    public ResponseEntity<PagamentoEntity> realizarPagamento(@PathVariable TaxaDTO dto) {
         return ResponseEntity.ok(domainService.realizarPagamento(dto));
     }
 
@@ -31,7 +31,7 @@ public class PagamentoController {
         return ResponseEntity.ok(appService.listarPagamentos());
     }
 
-    // LISTAR BOLETOS A PAGAR (separado no teu AppService)
+    //Acha o boleto e lista ele
     @GetMapping("/boletos")
     public ResponseEntity<List<PagamentoDTO>> listarBoletosAPagar() {
         return ResponseEntity.ok(appService.listarBoletosAPagar());
@@ -39,15 +39,8 @@ public class PagamentoController {
 
     // BUSCAR POR ID
     @GetMapping("/{id}")
-    public ResponseEntity<PagamentoDTO> buscarPorId(@PathVariable String id) {
+    public ResponseEntity<PagamentoDTO> buscarPagamentoPorId(@PathVariable String id) {
         return ResponseEntity.ok(appService.buscarPorId(id));
-    }
-
-    // DELETAR
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable String id) {
-        appService.deletar(id);
-        return ResponseEntity.noContent().build();
     }
 }
 

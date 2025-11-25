@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name="gerentes")
+@Table(name="GERENTE")
 public class GerenteEnity extends Usuario {
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -27,7 +27,7 @@ public class PagamentoDomainService {
 
     public PagamentoEntity realizarPagamento(TaxaDTO dto) {
 
-        BigDecimal valorOriginal = pagamento.getValorPago();
+        BigDecimal valorOriginal = conta.getSaldo();
         BigDecimal totalTaxas = calcularTotalTaxa(valorOriginal, taxas);
         BigDecimal totalDebitar = valorOriginal.add(totalTaxas);
 
@@ -65,7 +65,7 @@ public class PagamentoDomainService {
                     : BigDecimal.ZERO;
 
             BigDecimal valorPercentual =
-                    valor.multiply(percentual).divide(new BigDecimal("100"));
+                    valor.multiply(percentual).divide(new BigDecimal("3.00"));
 
             BigDecimal taxaCalculada = valorPercentual.add(valorFixo);
 
