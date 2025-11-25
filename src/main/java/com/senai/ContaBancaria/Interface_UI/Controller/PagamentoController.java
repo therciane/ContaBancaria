@@ -4,6 +4,7 @@ import com.senai.ContaBancaria.Application.DTO.PagamentoDTO;
 import com.senai.ContaBancaria.Application.DTO.TaxaDTO;
 import com.senai.ContaBancaria.Application.Service.PagamentoAppService;
 import com.senai.ContaBancaria.Domain.Entity.PagamentoEntity;
+import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
 import com.senai.ContaBancaria.Domain.Service.PagamentoDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class PagamentoController {
 
     // REALIZAR PAGAMENTO
     @PostMapping
-    public ResponseEntity<PagamentoEntity> realizarPagamento(@PathVariable TaxaDTO dto) {
-        return ResponseEntity.ok(domainService.realizarPagamento(dto));
+    public ResponseEntity<PagamentoEntity> realizarPagamento(@PathVariable PagamentoDTO dto, @RequestBody List<TaxaEntity> taxas) {
+        return ResponseEntity.ok(domainService.realizarPagamento(dto, taxas));
     }
 
     // LISTAR TODOS OS PAGAMENTOS

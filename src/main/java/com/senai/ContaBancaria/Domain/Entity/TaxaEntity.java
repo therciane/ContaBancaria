@@ -1,10 +1,7 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
 import com.senai.ContaBancaria.Domain.Enum.Descricao;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,12 +9,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @SuperBuilder
-@Table(name = "taxa")
 @DiscriminatorValue("TAXA")
 
 public class TaxaEntity extends ContaEntity {
@@ -33,6 +31,9 @@ public class TaxaEntity extends ContaEntity {
 
     @Column(name = "valor_fixo", precision = 10, scale = 2)
     private BigDecimal valorFixo;
+
+    @ManyToMany(mappedBy = "taxas")
+    private List<PagamentoEntity> pagamentos = new ArrayList<>();
 
     @Override
     public String getTipoConta() {

@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(
         name = "PagamentoDTO",
@@ -18,6 +19,8 @@ import java.time.LocalDateTime;
 
 @Builder
 public record PagamentoDTO(
+            String id,
+
             @NotNull
             ContaEntity conta,
 
@@ -33,16 +36,20 @@ public record PagamentoDTO(
             LocalDateTime data,
 
             @NotNull
-            StatusPagamento statusPagamento
+            StatusPagamento statusPagamento,
+
+            List<TaxaEntity> taxas
 ) {
 
     public PagamentoDTO fromEntity(PagamentoEntity pagamento) {
         return new PagamentoDTO(
+                id,
                 conta,
                 pagamento.getBoleto(),
                 pagamento.getValorPago(),
                 pagamento.getData(),
-                pagamento.getStatusPagamento()
+                pagamento.getStatusPagamento(),
+                taxas
         );
     }
 
@@ -53,6 +60,7 @@ public record PagamentoDTO(
                 .valorPago(valorPago)
                 .data(data)
                 .statusPagamento(this.statusPagamento != null ? this.statusPagamento : StatusPagamento.PENDENTE)
+                .taxas(taxas)
                 .build();
     }
 }

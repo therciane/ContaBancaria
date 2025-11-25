@@ -14,21 +14,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-
 public class TaxaAppService {
 
     private final TaxaRepository repository;
-
-    public TaxaAppService(TaxaRepository repository, TaxaDTO dto) {
-        this.repository = repository;
-    }
 
     public TaxaDTO salvar(TaxaDTO dto) {
         TaxaEntity entity = dto.toEntity();
         TaxaEntity saved = repository.save(entity);
         return dto.fromEntity(saved);
     }
-
 
     public List<TaxaDTO> listar() {
         return repository.findAll()
@@ -63,5 +57,4 @@ public class TaxaAppService {
         }
         repository.deleteById(id);
     }
-
 }

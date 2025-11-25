@@ -4,17 +4,20 @@ import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @SuperBuilder
-@Table (name = "pagamento")
+@NoArgsConstructor
+@AllArgsConstructor
+@Table (name = "PAGAMENTO")
 @DiscriminatorValue("PAGAMENTO")
 public class PagamentoEntity {
     @Id
@@ -39,7 +42,12 @@ public class PagamentoEntity {
     @Column (nullable = false)
     private StatusPagamento statusPagamento; //criar ENUM
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private String TaxaEntity;
+    @ManyToMany
+    @JoinTable(
+            name = "pagamento_taxas",
+            joinColumns = @JoinColumn(name = "pagamento_id"),
+            inverseJoinColumns = @JoinColumn(name = "taxa_id")
+    )
+    private List<TaxaEntity> taxas;
 
 }
