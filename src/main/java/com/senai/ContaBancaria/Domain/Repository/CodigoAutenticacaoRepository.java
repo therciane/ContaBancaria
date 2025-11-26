@@ -9,5 +9,5 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface CodigoAutenticacaoRepository  extends JpaRepository<CodigoAutenticacaoEntity, UUID> {
-    Optional<ClienteEntity> findByClienteIdAndValidadoIsFalse(UUID clienteId);
+    Optional<CodigoAutenticacaoEntity> findByClienteIdAndValidadoIsFalse(UUID clienteId);
 }
