@@ -94,8 +94,19 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.8.11</version>
 		</dependency>
+        <dependency>
+            <groupId>com.senai</groupId>
+            <artifactId>ContaBancaria</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-	</dependencies>
+		<!--<dependency>
+			<groupId>com.rafaelcosta</groupId>
+			<artifactId>spring-mqttx</artifactId>
+			<version>0.0.1</version>
+		</dependency>-->
+
+    </dependencies>
 
 
 
