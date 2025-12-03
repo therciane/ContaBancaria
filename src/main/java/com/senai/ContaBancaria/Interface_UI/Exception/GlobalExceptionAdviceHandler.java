@@ -224,13 +224,14 @@ public class GlobalExceptionAdviceHandler {
         );
     }
 
-    @ExceptionHandler(TaxaInvalidaException.class)
-    public ProblemDetail handleUsuarioTaxaInvalida(TaxaInvalidaException ex, HttpServletRequest request) {
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ProblemDetail handleAutenticacaoIotExpirada(AutenticacaoIoTExpiradaException ex, HttpServletRequest request) {
         return buildProblem(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "Essa taxa é inválida",
+                HttpStatus.GATEWAY_TIMEOUT,
+                "Tempo expirado para autenticação IoT",
                 ex.getMessage(),
                 request.getRequestURI()
         );
     }
+
 }
