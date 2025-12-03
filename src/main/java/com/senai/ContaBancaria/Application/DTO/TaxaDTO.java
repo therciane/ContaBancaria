@@ -1,7 +1,6 @@
 package com.senai.ContaBancaria.Application.DTO;
 
 import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
-import com.senai.ContaBancaria.Domain.Enum.Descricao;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
