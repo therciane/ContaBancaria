@@ -4,50 +4,52 @@ import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Data
-@SuperBuilder
+@Table(name = "pagamento")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table (name = "PAGAMENTO")
-@DiscriminatorValue("PAGAMENTO")
+@SuperBuilder
 public class PagamentoEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-    @ManyToOne
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conta_id", nullable = false)
     private ContaEntity conta;
 
     @NotNull
-    @Column (nullable = false, length = 48) //tamanho de um codigo de barras de um boleto comum no Brasil
+    @Column(nullable = false, length = 48)
     private String boleto;
 
-    @Column (name = "valor_pago", precision = 15, scale = 2)
-    @Positive
     @NotNull
+    @Positive
+    @Column(name = "valor_pago", nullable = false, precision = 15, scale = 2)
     private BigDecimal valorPago;
 
-    @Column (name = "data_pagamento")
     @NotNull
-    private LocalDateTime data;
+    @Column(name = "data_pagamento", nullable = false)
+    private LocalDateTime dataPagamento;
 
-    @Column (nullable = false)
-    private StatusPagamento statusPagamento; //criar ENUM
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusPagamento status;
 
-    @ManyToMany
-    @JoinTable(
+    @ManyToMany @JoinTable(
             name = "pagamento_taxas",
             joinColumns = @JoinColumn(name = "pagamento_id"),
             inverseJoinColumns = @JoinColumn(name = "taxa_id")
     )
     private List<TaxaEntity> taxas;
-
 }

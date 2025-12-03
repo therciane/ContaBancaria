@@ -1,24 +1,27 @@
 package com.senai.ContaBancaria.Domain.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Data //Ela não gera construtores
-@AllArgsConstructor //Gera os construtores
-@NoArgsConstructor //Gera construtores sem argumentos
-@Builder //?
-//Modela banco de dados
-@Table (
-        name = "cliente",
-        uniqueConstraints = @UniqueConstraint(name = "uk_cliente_cpf", columnNames = "cpf") //Chave unica impedindo nomes iuais
+//Não usar @Data para evitar problemas com herança em entidades JPA
 
+@Entity
+//Modela a tabela no banco de dados
+@Table(
+        name = "cliente",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_cliente_cpf",
+                columnNames = "cpf"
+        )
 )
+@Getter
+@Setter
+@NoArgsConstructor //Gera os construtores sem argumentos
+@AllArgsConstructor //Gera os construtores
+@Builder //Gera o padrão de projeto Builder
 public class ClienteEntity extends Usuario {
 
     @Id
@@ -31,8 +34,13 @@ public class ClienteEntity extends Usuario {
     @Column(nullable = false, length = 11)
     private String cpf;
 
-    @OneToMany (mappedBy = "cliente", cascade = CascadeType.ALL) //Relacionamento com banco de dados.
-    private List <ContaEntity> contas;
+    @OneToMany(
+            mappedBy = "cliente",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true // Se uma conta for removida da lista, ela também será removida do banco de dados
+    )
+    @Builder.Default
+    private List<ContaEntity> contas = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean ativo;

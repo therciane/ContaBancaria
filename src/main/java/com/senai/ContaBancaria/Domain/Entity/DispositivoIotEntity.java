@@ -6,11 +6,11 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
+@Table(name = "dispositivo_iot")
 @Getter
 @Setter
-@Table (name = "dispositivo_iot")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class DispositivoIotEntity {
 
@@ -18,7 +18,7 @@ public class DispositivoIotEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "codigo_serial", nullable = false, unique = true)
+    @Column(name = "codigo_serial", nullable = false, unique = true, length = 60)
     private String codigoSerial;
 
     @Column(nullable = false)
@@ -28,7 +28,7 @@ public class DispositivoIotEntity {
     private Boolean ativo;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id")
-    private ClienteEntity relacionamentoCliente;
-
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private ClienteEntity cliente;
 }
+

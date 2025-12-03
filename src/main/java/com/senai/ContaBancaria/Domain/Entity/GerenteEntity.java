@@ -15,16 +15,22 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name="GERENTE")
-public class GerenteEnity extends Usuario {
+@Table(name = "gerente")
+public class GerenteEntity extends Usuario {
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name="gerentes_clientes", joinColumns=@JoinColumn(name="gerentes_id"))
-    @Column(name="Usuario")
-    private List<String > listaDeClientes;
+    @CollectionTable(
+            name = "gerente_clientes",
+            joinColumns = @JoinColumn(name = "gerente_id")
+    )
+    @Column(name = "cliente")
+    private List<String> listaDeClientes;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name="gerentes_bancos", joinColumns=@JoinColumn(name="gerentes_id"))
-    @Column(name="bancos")
+    @CollectionTable(
+            name = "gerente_bancos",
+            joinColumns = @JoinColumn(name = "gerente_id")
+    )
+    @Column(name = "banco")
     private List<String> listaDeBancos;
 }

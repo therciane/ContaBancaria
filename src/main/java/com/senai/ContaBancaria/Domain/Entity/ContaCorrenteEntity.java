@@ -4,19 +4,22 @@ import com.senai.ContaBancaria.Domain.Exceptions.SaldoInsuficienteException;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 
 @Entity
-@DiscriminatorValue("CORRENTE") //Valor que identifica a classe
-@Data
-@EqualsAndHashCode(callSuper = true) //Gera equals e hashcode considerando a superclasse
+@DiscriminatorValue("CORRENTE")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 public class ContaCorrenteEntity extends ContaEntity{
+
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal limite;
+
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal taxa;
 
@@ -29,14 +32,16 @@ public class ContaCorrenteEntity extends ContaEntity{
     public void sacar(BigDecimal valor) {
         validarValorMaiorQueZero(valor, "saque");
 
+        // taxa é percentual decimal: ex 0.02 = 2%
         BigDecimal custoSaque = valor.multiply(this.taxa);
         BigDecimal totalSaque = valor.add(custoSaque);
 
-        // Aqui, permitimos que o saldo fique negativo até o limite definido
+        // saldo negativo permitido até o limite
         if (this.getSaldo().add(this.limite).compareTo(totalSaque) < 0) {
             throw new SaldoInsuficienteException();
         }
 
-        this.setSaldo(this.getSaldo().subtract(valor));
+        // desconta o valor e a taxa
+        this.setSaldo(this.getSaldo().subtract(totalSaque));
     }
 }

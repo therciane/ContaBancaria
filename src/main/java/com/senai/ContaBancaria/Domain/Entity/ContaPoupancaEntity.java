@@ -3,20 +3,20 @@ package com.senai.ContaBancaria.Domain.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@DiscriminatorValue("POUPANCA")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
-@DiscriminatorValue("POUPANCA") //Valor que identifica a classe
-//@NoArgsConstructor
-
 public class ContaPoupancaEntity extends ContaEntity {
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal rendimento;
 
@@ -26,7 +26,7 @@ public class ContaPoupancaEntity extends ContaEntity {
     }
 
     public void aplicarRendimento() {
-        var ganho = getSaldo().multiply(rendimento);
-        setSaldo(getSaldo().add(ganho));
+        BigDecimal ganho = this.getSaldo().multiply(this.rendimento);
+        this.setSaldo(this.getSaldo().add(ganho));
     }
 }

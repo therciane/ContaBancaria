@@ -5,38 +5,35 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
-@SuperBuilder
-@DiscriminatorValue("TAXA")
+@Table(name = "taxa")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TaxaEntity {
 
-public class TaxaEntity extends ContaEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NotBlank
-    @Column (name = "descricao", nullable = false, length = 100)
-    private Descricao descricao;
+    @Column(nullable = false, length = 100)
+    private String descricao;
 
-    @DecimalMin("3.0")
     @NotNull
-    @Column (name = "percentual", precision = 5, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 4)
     private BigDecimal percentual;
 
     @Column(name = "valor_fixo", precision = 10, scale = 2)
     private BigDecimal valorFixo;
 
     @ManyToMany(mappedBy = "taxas")
-    private List<PagamentoEntity> pagamentos = new ArrayList<>();
-
-    @Override
-    public String getTipoConta() {
-        return "TAXA";
-    }
+    private Set<PagamentoEntity> pagamentos = new HashSet<>();
 }

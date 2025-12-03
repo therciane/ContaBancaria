@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "codigo_autenticacao")
 @Getter
 @Setter
-@Table(name = "codigo_autenticacao")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CodigoAutenticacaoEntity {
 
@@ -21,14 +21,18 @@ public class CodigoAutenticacaoEntity {
     @Column(nullable = false, length = 10)
     private String codigo;
 
-    @Column(nullable = false)
-    private LocalDateTime expiracao; // ou LocalDateTime, dependendo da regra
+    @Column(name = "expira_em", nullable = false)
+    private LocalDateTime expiraEm;
 
     @Column(nullable = false)
-    private Boolean validado;
+    private Boolean validado = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @JoinColumn(
+            name = "cliente_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_codigoaut_cliente")
+    )
     private ClienteEntity cliente;
-
 }
+

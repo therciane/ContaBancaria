@@ -1,6 +1,6 @@
 package com.senai.ContaBancaria.Infrastructure.Config;
 
-import com.senai.ContaBancaria.Domain.Entity.GerenteEnity;
+import com.senai.ContaBancaria.Domain.Entity.GerenteEntity;
 import com.senai.ContaBancaria.Domain.Enum.Role;
 import com.senai.ContaBancaria.Domain.Repository.GerenteRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class AdminBootstrap implements CommandLineRunner{
                     }
                 },
                 () -> {
-                    GerenteEnity admin = GerenteEnity.builder()
+                    GerenteEntity admin = GerenteEntity.builder()
                             .nomeCompleto("Administrador Provisório")
                             .email(adminEmail)
                             .cpf("000.000.000-00")
