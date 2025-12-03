@@ -224,7 +224,7 @@ public class GlobalExceptionAdviceHandler {
         );
     }
 
-    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    @ExceptionHandler(AutenticacaoIoTExpiradaException.class)
     public ProblemDetail handleAutenticacaoIotExpirada(AutenticacaoIoTExpiradaException ex, HttpServletRequest request) {
         return buildProblem(
                 HttpStatus.GATEWAY_TIMEOUT,
