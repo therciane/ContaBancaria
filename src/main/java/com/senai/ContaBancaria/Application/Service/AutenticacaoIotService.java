@@ -1,5 +1,6 @@
 package com.senai.ContaBancaria.Application.Service;
 
+import com.senai.ContaBancaria.Application.DTO.CodigoAutenticacaoDTO;
 import com.senai.ContaBancaria.Domain.Entity.CodigoAutenticacaoEntity;
 import com.senai.ContaBancaria.Infrastructure.Rest.MqttGateway;
 import com.senai.ContaBancaria.Domain.Exceptions.AutenticacaoIoTExpiradaException;
@@ -31,7 +32,7 @@ public class AutenticacaoIotService {
         );
     }
 
-    public void receberValidacao(UUID clienteId, String codigoRecebido, Boolean confirmado) {
+    public CodigoAutenticacaoDTO receberValidacao(UUID clienteId, String codigoRecebido, Boolean confirmado) {
         CodigoAutenticacaoEntity codigo = repository.findByClienteIdAndValidadoIsFalse(clienteId)
                 .orElseThrow(AutenticacaoIoTExpiradaException::new);
 
@@ -43,6 +44,7 @@ public class AutenticacaoIotService {
 
         codigo.setValidado(true);
         repository.save(codigo);
+        return new CodigoAutenticacaoDTO(codigo.getId(), codigo.getCodigo(), codigo.getExpiracao(), codigo.getValidado());
     }
 
     private CodigoAutenticacaoEntity gerarOuSalvarCodigo(UUID clienteId){
