@@ -9,7 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface ContaRepository extends JpaRepository<ContaEntity, String> {
-    List <ContaEntity> findAllByAtivoTrue();
 
-    Optional <ContaEntity> findByNumeroAndAtivoTrue(String numero);
+    List<ContaEntity> findAllByAtivoTrue();
+
+    Optional<ContaEntity> findByNumeroAndAtivoTrue(String numero);
+
+    boolean existsByNumero(String numero); // validações de criação
 }
+

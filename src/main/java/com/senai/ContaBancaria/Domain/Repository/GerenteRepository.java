@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface GerenteRepository extends JpaRepository<GerenteEntity, String> {
-    Optional<GerenteEntity> findByEmail(String email);
+    Optional<GerenteEntity> findByEmailAndAtivoTrue(String email);
 }

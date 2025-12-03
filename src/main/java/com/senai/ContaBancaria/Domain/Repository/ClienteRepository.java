@@ -11,7 +11,10 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteEntity, String> {
 
-   Optional <ClienteEntity> findByCpfAndAtivoTrue(String cpf); // Método para encontrar um cliente pelo CPF dentro do BD
+   Optional<ClienteEntity> findByCpfAndAtivoTrue(String cpf);
 
-   List <ClienteEntity> findAllByAtivoTrue();
+   List<ClienteEntity> findAllByAtivoTrue();
+
+   boolean existsByCpf(String cpf); // útil para validação de criação
 }
+

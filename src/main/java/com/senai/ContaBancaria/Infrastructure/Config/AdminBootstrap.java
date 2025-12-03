@@ -24,7 +24,7 @@ public class AdminBootstrap implements CommandLineRunner{
 
     @Override
     public void run(String... args) {
-        gerenteRepository.findByEmail(adminEmail).ifPresentOrElse(
+        gerenteRepository.findByEmailAndAtivoTrue(adminEmail).ifPresentOrElse(
                 prof -> {
                     if (!prof.isAtivo()) {
                         prof.setAtivo(true);
