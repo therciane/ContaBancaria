@@ -2,11 +2,12 @@ package com.senai.ContaBancaria.Domain.Service;
 
 import com.senai.ContaBancaria.Application.DTO.PagamentoDTO;
 import com.senai.ContaBancaria.Application.DTO.TaxaDTO;
+import com.senai.ContaBancaria.Domain.Entity.CodigoAutenticacaoEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.PagamentoEntity;
 import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
 import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
-import com.senai.ContaBancaria.Domain.Exceptions.SaldoInsuficienteException;
+import com.senai.ContaBancaria.Domain.Exceptions.*;
 import com.senai.ContaBancaria.Domain.Repository.ContaRepository;
 import com.senai.ContaBancaria.Domain.Repository.PagamentoRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,65 +18,98 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class PagamentoDomainService {
 
-    private final ContaRepository contaRepository;
-    private final PagamentoRepository pagamentoRepository;
+    public PagamentoEntity processarPagamento(
+            ContaEntity conta,
+            String boleto,
+            BigDecimal valorBoleto,
+            List<TaxaEntity> taxas,
+            CodigoAutenticacaoEntity codigoAutenticacao
+    ) {
 
-    public PagamentoEntity realizarPagamento(PagamentoDTO dto, List<TaxaEntity> taxas) {
+        validarConta(conta);
+        validarBoleto(boleto, valorBoleto);
+        validarCodigoIoT(codigoAutenticacao);
 
-        // 1 — Buscar conta
-        ContaEntity conta = contaRepository.findById(dto.id())
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+        BigDecimal valorFinal = calcularValorFinal(valorBoleto, taxas);
 
-        // 2 — Calcular total
-        BigDecimal totalTaxas = calcularTotalTaxa(conta.getSaldo(), taxas);
-        BigDecimal totalDebitar = conta.getSaldo().add(totalTaxas);
+        StatusPagamento status = validarSaldo(conta, valorFinal);
 
-        // 3 — Validar saldo
-        if (conta.getSaldo().compareTo(totalDebitar) < 0) {
-            PagamentoEntity pagamentoFalho = new PagamentoEntity();
-            pagamentoFalho.setStatusPagamento(StatusPagamento.SALDO_INSUFICIENTE);
-            return pagamentoFalho;
+        PagamentoEntity pagamento = PagamentoEntity.builder()
+                .conta(conta)
+                .boleto(boleto)
+                .valorPago(valorBoleto)
+                .dataPagamento(LocalDateTime.now())
+                .status(status)
+                .taxas(taxas)
+                .build();
+
+        if (status == StatusPagamento.SUCESSO) {
+            conta.sacar(valorFinal);
         }
 
-        // 4 — Debitar
-        conta.setSaldo(conta.getSaldo().subtract(totalDebitar));
-        contaRepository.save(conta);
-
-        // 5 — Criar pagamento
-        PagamentoEntity pagamento = new PagamentoEntity();
-        pagamento.setConta(conta);
-        pagamento.setValorPago(totalDebitar);
-        pagamento.setData(LocalDateTime.now());
-        pagamento.setStatusPagamento(StatusPagamento.SUCESSO);
-        pagamento.setTaxas(taxas);
-
-        return pagamentoRepository.save(pagamento);
+        return pagamento;
     }
 
-    public BigDecimal calcularTotalTaxa(BigDecimal valor, List<TaxaEntity> taxas) {
+    private void validarConta(ContaEntity conta) {
+        if (conta == null || !conta.isAtivo()) {
+            throw new EntidadeNaoEncontradaException("Conta");
+        }
+    }
 
-        if (taxas == null || taxas.isEmpty()) {
-            return BigDecimal.ZERO;
+    private void validarBoleto(String boleto, BigDecimal valor) {
+        if (boleto == null || boleto.isBlank()) {
+            throw new ValidacaoException("Boleto inválido.");
         }
 
-        BigDecimal total = BigDecimal.ZERO;
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValoresNegativosException("pagamento");
+        }
+    }
+
+    private void validarCodigoIoT(CodigoAutenticacaoEntity codigo) {
+        if (codigo == null) {
+            throw new AutenticacaoIoTExpiradaException();
+        }
+
+        if (codigo.getExpiraEm().isBefore(LocalDateTime.now())) {
+            throw new AutenticacaoIoTExpiradaException();
+        }
+
+        if (!codigo.getValidado()) {
+            throw new AutenticacaoIoTExpiradaException();
+        }
+    }
+
+    private StatusPagamento validarSaldo(ContaEntity conta, BigDecimal valorFinal) {
+        if (conta.getSaldo().compareTo(valorFinal) < 0) {
+            return StatusPagamento.SALDO_INSUFICIENTE;
+        }
+        return StatusPagamento.SUCESSO;
+    }
+
+    public BigDecimal calcularValorFinal(BigDecimal valorBoleto, List<TaxaEntity> taxas) {
+
+        BigDecimal totalTaxas = BigDecimal.ZERO;
 
         for (TaxaEntity taxa : taxas) {
 
-            BigDecimal percentual = taxa.getPercentual() != null ? taxa.getPercentual() : BigDecimal.ZERO;
-            BigDecimal valorFixo = taxa.getValorFixo() != null ? taxa.getValorFixo() : BigDecimal.ZERO;
+            BigDecimal percentual = taxa.getPercentual() != null
+                    ? valorBoleto.multiply(taxa.getPercentual())
+                    : BigDecimal.ZERO;
 
-            BigDecimal valorPercentual = valor.multiply(percentual).divide(new BigDecimal("100"));
+            BigDecimal valorFixo = taxa.getValorFixo() != null
+                    ? taxa.getValorFixo()
+                    : BigDecimal.ZERO;
 
-            total = total.add(valorPercentual.add(valorFixo));
+            totalTaxas = totalTaxas.add(percentual).add(valorFixo);
         }
 
-        return total;
+        return valorBoleto.add(totalTaxas);
     }
 }
+
 
 
 

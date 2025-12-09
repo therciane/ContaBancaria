@@ -42,7 +42,6 @@ public class PagamentoEntity {
     private LocalDateTime dataPagamento;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusPagamento status;
 
