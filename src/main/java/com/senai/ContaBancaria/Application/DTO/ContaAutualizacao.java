@@ -10,7 +10,6 @@ public record ContaAutualizacao(
 
         @NotNull(message = "O saldo não pode ser negativo e/ou ficar em branco")
         @DecimalMin(value = "0.0", inclusive = true)
-        @Column(nullable = false)
         BigDecimal saldo,
 
         @DecimalMin(value = "0.0", inclusive = false, message = "O limite de sua conta corrente, não pode ficar vazio")

@@ -20,25 +20,28 @@ public record CodigoAutenticacaoDTO(
         LocalDateTime expiracao,
 
         @NotNull
-        Boolean validado
+        Boolean validado,
 
+        String clienteId
 ) {
-    public static CodigoAutenticacaoDTO fromEntity(CodigoAutenticacaoEntity codAuth) {
+
+    public static CodigoAutenticacaoDTO fromEntity(CodigoAutenticacaoEntity entity) {
         return new CodigoAutenticacaoDTO(
-                codAuth.getId(),
-                codAuth.getCodigo(),
-                codAuth.getExpiracao(),
-                codAuth.getValidado()
+                entity.getId(),
+                entity.getCodigo(),
+                entity.getExpiraEm(),
+                entity.getValidado(),
+                entity.getCliente().getId()
         );
     }
 
-    public CodigoAutenticacaoEntity toEntity(ClienteEntity cliente){
+    public CodigoAutenticacaoEntity toEntity(ClienteEntity cliente) {
         return CodigoAutenticacaoEntity.builder()
-                .id(this.id)
                 .codigo(this.codigo)
-                .expiracao(this.expiracao)
+                .expiraEm(this.expiracao)
                 .validado(this.validado)
                 .cliente(cliente)
                 .build();
     }
 }
+

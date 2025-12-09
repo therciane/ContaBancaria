@@ -12,18 +12,18 @@ import java.math.BigDecimal;
         name = "TaxaDTO",
         description = "DTO para transportar informações de Taxas"
 )
-
 @Builder
 public record TaxaDTO(
 
-        @NotBlank
-        Descricao descricao,
+        @NotNull(message = "A descrição da taxa é obrigatória")
+        String descricao,
 
         @NotNull
         @DecimalMin(value = "0.0", inclusive = false, message = "O percentual deve ser maior que zero.")
         BigDecimal percentual,
 
         @NotNull
+        @DecimalMin(value = "0.0", inclusive = true, message = "O valor fixo deve ser no mínimo zero.")
         BigDecimal valorFixo
 ) {
 
@@ -37,9 +37,10 @@ public record TaxaDTO(
 
     public TaxaEntity toEntity(){
         return TaxaEntity.builder()
-                .descricao(descricao)
-                .percentual(new BigDecimal("3.00"))
-                .valorFixo(valorFixo)
+                .descricao(this.descricao)
+                .percentual(this.percentual)
+                .valorFixo(this.valorFixo)
                 .build();
     }
 }
+

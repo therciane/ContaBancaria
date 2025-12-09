@@ -11,6 +11,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Schema(
         name = "PagamentoDTO",
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Builder
 public record PagamentoDTO(
-            String id,
+            UUID id,
 
             @NotNull
             ContaEntity conta,
@@ -32,7 +33,7 @@ public record PagamentoDTO(
             BigDecimal valorPago,
 
             @NotNull
-            @JsonFormat(pattern = "dd-mm-yyyy'T'HH:mm:ss", timezone = "America/Sao_Paulo")
+            @JsonFormat(pattern = "dd-mm-yyyy'T'HH:MM:ss", timezone = "America/Sao_Paulo")
             LocalDateTime data,
 
             @NotNull
@@ -47,14 +48,14 @@ public record PagamentoDTO(
                 conta,
                 pagamento.getBoleto(),
                 pagamento.getValorPago(),
-                pagamento.getData(),
-                pagamento.getStatusPagamento(),
+                pagamento.getDataPagamento(),
+                pagamento.getStatus(),
                 taxas
         );
     }
 
-    public PagamentoEntity toEntity(){
-        return PagamentoEntity.builder()
+    public PagamentoDTO toEntity(){
+        return PagamentoDTO.builder()
                 .conta(conta)
                 .boleto(boleto)
                 .valorPago(valorPago)
