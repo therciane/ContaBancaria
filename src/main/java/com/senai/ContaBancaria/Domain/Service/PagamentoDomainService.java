@@ -1,16 +1,11 @@
 package com.senai.ContaBancaria.Domain.Service;
 
-import com.senai.ContaBancaria.Application.DTO.PagamentoDTO;
-import com.senai.ContaBancaria.Application.DTO.TaxaDTO;
 import com.senai.ContaBancaria.Domain.Entity.CodigoAutenticacaoEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.PagamentoEntity;
 import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
 import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
 import com.senai.ContaBancaria.Domain.Exceptions.*;
-import com.senai.ContaBancaria.Domain.Repository.ContaRepository;
-import com.senai.ContaBancaria.Domain.Repository.PagamentoRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -109,8 +104,3 @@ public class PagamentoDomainService {
         return valorBoleto.add(totalTaxas);
     }
 }
-
-
-
-
-//fará aplicação da Taxa, as suas regras de negócio
