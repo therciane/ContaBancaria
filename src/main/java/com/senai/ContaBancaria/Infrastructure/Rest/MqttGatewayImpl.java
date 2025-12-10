@@ -1,8 +1,12 @@
 package com.senai.ContaBancaria.Infrastructure.Rest;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.message.Message;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.stereotype.Component;
+
 
 @Component
 @RequiredArgsConstructor
@@ -20,4 +24,3 @@ public class MqttGatewayImpl implements MqttGateway {
         mqttHandler.handleMessage(message);
     }
 }
-
