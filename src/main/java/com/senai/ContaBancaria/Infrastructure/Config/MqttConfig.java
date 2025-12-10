@@ -1,7 +1,16 @@
 package com.senai.ContaBancaria.Infrastructure.Config;
 
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
+import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
+import org.springframework.messaging.MessageChannel;
 
+@Configuration
 public class MqttConfig {
 
     @Bean
@@ -9,6 +18,8 @@ public class MqttConfig {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setServerURIs(new String[]{"tcp://localhost:1883"});
         options.setCleanSession(true);
+        options.setAutomaticReconnect(true);
+        options.setConnectionTimeout(10);
         return options;
     }
 
@@ -19,23 +30,24 @@ public class MqttConfig {
         return factory;
     }
 
+    // Canal pelo qual as mensagens saem
     @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
 
-    @Bean
-    public MqttPahoMessageHandler mqttHandler(MqttPahoClientFactory factory) {
-        MqttPahoMessageHandler handler =
-                new MqttPahoMessageHandler("backend-publisher", factory);
-        handler.setAsync(true);
-        handler.setDefaultTopic("default/topic");
-        return handler;
-    }
-
+    // Handler responsável por publicar mensagens MQTT
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
-    public MqttPahoMessageHandler outbound(MqttPahoClientFactory factory) {
-        return mqttHandler(factory);
+    public MqttPahoMessageHandler mqttOutboundHandler(MqttPahoClientFactory factory) {
+        MqttPahoMessageHandler handler =
+                new MqttPahoMessageHandler("backend-publisher", factory);
+
+        handler.setAsync(true);
+        handler.setDefaultQos(1);
+        handler.setDefaultTopic("banco/autenticacao/default");
+
+        return handler;
     }
 }
+
