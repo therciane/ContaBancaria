@@ -20,9 +20,8 @@ public record CodigoAutenticacaoDTO(
         LocalDateTime expiracao,
 
         @NotNull
-        Boolean validado,
+        Boolean validado
 
-        String clienteId
 ) {
 
     public static CodigoAutenticacaoDTO fromEntity(CodigoAutenticacaoEntity entity) {
@@ -30,8 +29,7 @@ public record CodigoAutenticacaoDTO(
                 entity.getId(),
                 entity.getCodigo(),
                 entity.getExpiraEm(),
-                entity.getValidado(),
-                entity.getCliente().getId()
+                entity.getValidado()
         );
     }
 

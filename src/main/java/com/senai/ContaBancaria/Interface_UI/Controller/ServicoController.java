@@ -101,7 +101,7 @@ public class ServicoController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ServicoDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ServicoDTO> buscarPorId(@PathVariable String id) {
         return ResponseEntity
                 .ok(service.buscarPorId(id));
     }
@@ -148,7 +148,7 @@ public class ServicoController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoDTO> atualizar(@PathVariable Long id, @Valid @org.springframework.web.bind.annotation.RequestBody ServicoDTO dto) {
+    public ResponseEntity<ServicoDTO> atualizar(@PathVariable String id, @Valid @org.springframework.web.bind.annotation.RequestBody ServicoDTO dto) {
         return ResponseEntity
                 .ok(service.atualizar(id, dto));
     }
@@ -172,7 +172,7 @@ public class ServicoController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable String id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }

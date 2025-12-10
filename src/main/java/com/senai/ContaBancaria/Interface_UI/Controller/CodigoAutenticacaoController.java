@@ -16,7 +16,7 @@ public class CodigoAutenticacaoController {
     private AutenticacaoIotService service;
 
     @PostMapping("/{id}")
-    public ResponseEntity<CodigoAutenticacaoDTO> solicitarCodigoAutenticacao(@PathVariable UUID id) {
+    public ResponseEntity<CodigoAutenticacaoDTO> solicitarCodigoAutenticacao(@PathVariable String id) {
         service.solicitarAutenticacao(id);
         return ResponseEntity.accepted().build();
     }

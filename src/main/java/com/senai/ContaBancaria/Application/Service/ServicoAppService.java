@@ -4,22 +4,24 @@ import com.senai.ContaBancaria.Application.DTO.ServicoDTO;
 import com.senai.ContaBancaria.Domain.Entity.ServicoEntity;
 import com.senai.ContaBancaria.Domain.Exceptions.EntidadeNaoEncontradaException;
 import com.senai.ContaBancaria.Domain.Repository.ServicoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ServicoAppService {
 
     private final ServicoRepository repository;
 
-    public ServicoAppService(ServicoRepository repository) {
-        this.repository = repository;
-    }
-
     public ServicoDTO salvar(ServicoDTO dto) {
-        ServicoEntity servico = dto.toEntity();
+        var servico = dto.toEntity();
         servico.validar();
-        return ServicoDTO.fromEntity(repository.save(servico));
+
+        var salvo = repository.save(servico);
+        return ServicoDTO.fromEntity(salvo);
     }
 
     public List<ServicoDTO> listar() {
@@ -29,30 +31,35 @@ public class ServicoAppService {
                 .toList();
     }
 
-    public ServicoDTO buscarPorId(Long id) {
-        return ServicoDTO.fromEntity(
-                repository.findById(id)
-                        .orElseThrow(() -> new EntidadeNaoEncontradaException("Serviço com ID " + id + " não encontrado."))
-        );
+    public ServicoDTO buscarPorId(String id) {
+        var servico = repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Serviço"));
+
+        return ServicoDTO.fromEntity(servico);
     }
 
-    public ServicoDTO atualizar(Long id, ServicoDTO dtoAtualizado) {
-        ServicoEntity existente = repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Serviço com ID " + id + " não encontrado."));
+    public ServicoDTO atualizar(String id, ServicoDTO dto) {
 
-        ServicoEntity atualizado = dtoAtualizado.toEntity();
-        atualizado.setId(existente.getId());
+        var existente = repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Serviço"));
 
-        atualizado.validar();
-        return ServicoDTO.fromEntity(repository.save(atualizado));
+        // Atualiza apenas campos permitidos (evita recriar entidade do zero)
+        existente.setTipoConta(dto.tipoConta());
+        existente.setSaldo(dto.saldo());
+
+        existente.validar();
+
+        var atualizado = repository.save(existente);
+        return ServicoDTO.fromEntity(atualizado);
     }
 
-    public void deletar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("Serviço com ID " + id + " não encontrado.");
+    public void deletar(String id) {
+        var existe = repository.existsById(id);
+
+        if (!existe) {
+            throw new EntidadeNaoEncontradaException("Serviço");
         }
+
         repository.deleteById(id);
     }
-
 }
-

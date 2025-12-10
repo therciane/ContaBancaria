@@ -42,17 +42,18 @@ public record PagamentoDTO(
             List<TaxaEntity> taxas
 ) {
 
-    public PagamentoDTO fromEntity(PagamentoEntity pagamento) {
+    public static PagamentoDTO fromEntity(PagamentoEntity pagamento) {
         return new PagamentoDTO(
-                id,
-                conta,
+                pagamento.getId(),
+                pagamento.getConta(),
                 pagamento.getBoleto(),
                 pagamento.getValorPago(),
                 pagamento.getDataPagamento(),
                 pagamento.getStatus(),
-                taxas
+                pagamento.getTaxas()
         );
     }
+
 
     public PagamentoDTO toEntity(){
         return PagamentoDTO.builder()

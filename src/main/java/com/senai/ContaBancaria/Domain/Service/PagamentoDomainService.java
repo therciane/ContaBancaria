@@ -1,11 +1,13 @@
 package com.senai.ContaBancaria.Domain.Service;
 
+import com.senai.ContaBancaria.Application.DTO.PagamentoDTO;
 import com.senai.ContaBancaria.Domain.Entity.CodigoAutenticacaoEntity;
 import com.senai.ContaBancaria.Domain.Entity.ContaEntity;
 import com.senai.ContaBancaria.Domain.Entity.PagamentoEntity;
 import com.senai.ContaBancaria.Domain.Entity.TaxaEntity;
 import com.senai.ContaBancaria.Domain.Enum.StatusPagamento;
 import com.senai.ContaBancaria.Domain.Exceptions.*;
+import com.senai.ContaBancaria.Domain.Repository.ContaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class PagamentoDomainService {
+
+    ContaRepository repository;
 
     public PagamentoEntity processarPagamento(
             ContaEntity conta,
@@ -103,4 +107,30 @@ public class PagamentoDomainService {
 
         return valorBoleto.add(totalTaxas);
     }
+
+    public PagamentoEntity realizarPagamento(PagamentoEntity pagamento, List<TaxaEntity> taxas) {
+        ContaEntity conta = pagamento.getConta();
+
+        // Calcula total a pagar (valor boleto + taxas)
+        BigDecimal totalTaxas = calcularValorFinal(pagamento.getValorPago(), taxas);
+        BigDecimal totalDebitar = pagamento.getValorPago().add(totalTaxas);
+
+        // saldo insuficiente → marca falha
+        if (conta.getSaldo().compareTo(totalDebitar) < 0) {
+            pagamento.setStatus(StatusPagamento.SALDO_INSUFICIENTE);
+            return pagamento;
+        }
+
+        // Debita da conta
+        conta.setSaldo(conta.getSaldo().subtract(totalDebitar));
+        repository.save(conta);
+
+        // Atualiza pagamento
+        pagamento.setStatus(StatusPagamento.SUCESSO);
+        pagamento.setDataPagamento(LocalDateTime.now());
+        pagamento.setTaxas(taxas);
+
+        return pagamento;
+    }
+
 }

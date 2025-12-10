@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +19,14 @@ public class TaxaAppService {
 
     private final TaxaRepository repository;
 
+    @Transactional
     public TaxaDTO salvar(TaxaDTO dto) {
-        TaxaEntity entity = dto.toEntity();
-        TaxaEntity saved = repository.save(entity);
-        return dto.fromEntity(saved);
+        var entity = dto.toEntity();
+        var salvo = repository.save(entity);
+        return TaxaDTO.fromEntity(salvo);
     }
 
+    @Transactional(readOnly = true)
     public List<TaxaDTO> listar() {
         return repository.findAll()
                 .stream()
@@ -31,29 +34,31 @@ public class TaxaAppService {
                 .toList();
     }
 
-    public TaxaDTO buscarPorId(String id) {
-        return TaxaDTO.fromEntity(
-                repository.findById(id)
-                        .orElseThrow(() -> new EntidadeNaoEncontradaException("Taxa com ID " + id + " não encontrada."))
-        );
+    @Transactional(readOnly = true)
+    public TaxaDTO buscarPorId(UUID id) {
+        var taxa = repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Taxa"));
+
+        return TaxaDTO.fromEntity(taxa);
     }
 
-    public TaxaDTO atualizar(String id, BigDecimal valor, TaxaDTO dtoAtualizado) {
-        TaxaEntity existente = repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Taxa não encontrada"));
+    @Transactional
+    public TaxaDTO atualizar(UUID id, TaxaDTO dto) {
+        var existente = repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Taxa"));
 
-        existente.setPercentual(dtoAtualizado.percentual());
-        existente.setValorFixo(dtoAtualizado.valorFixo());
-        existente.setDescricao(dtoAtualizado.descricao());
+        existente.setDescricao(dto.descricao());
+        existente.setPercentual(dto.percentual());
+        existente.setValorFixo(dto.valorFixo());
 
-        TaxaEntity salvo = repository.save(existente);
-
+        var salvo = repository.save(existente);
         return TaxaDTO.fromEntity(salvo);
     }
 
-    public void deletar(String id) {
+    @Transactional
+    public void deletar(UUID id) {
         if (!repository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("Taxa com ID " + id + " não encontrado.");
+            throw new EntidadeNaoEncontradaException("Taxa");
         }
         repository.deleteById(id);
     }
