@@ -18,6 +18,7 @@ import java.util.List;
 public class PagamentoDomainService {
 
     ContaRepository repository;
+    PagamentoEntity pagamentos;
 
     public PagamentoEntity processarPagamento(
             ContaEntity conta,
@@ -108,17 +109,17 @@ public class PagamentoDomainService {
         return valorBoleto.add(totalTaxas);
     }
 
-    public PagamentoEntity realizarPagamento(PagamentoEntity pagamento, List<TaxaEntity> taxas) {
-        ContaEntity conta = pagamento.getConta();
+    public PagamentoEntity realizarPagamento(PagamentoDTO pagamento, List<TaxaEntity> taxas) {
+        ContaEntity conta = pagamento.conta();
 
         // Calcula total a pagar (valor boleto + taxas)
-        BigDecimal totalTaxas = calcularValorFinal(pagamento.getValorPago(), taxas);
-        BigDecimal totalDebitar = pagamento.getValorPago().add(totalTaxas);
+        BigDecimal totalTaxas = calcularValorFinal(pagamento.valorPago(), taxas);
+        BigDecimal totalDebitar = pagamento.valorPago().add(totalTaxas);
 
         // saldo insuficiente → marca falha
         if (conta.getSaldo().compareTo(totalDebitar) < 0) {
-            pagamento.setStatus(StatusPagamento.SALDO_INSUFICIENTE);
-            return pagamento;
+            pagamentos.setStatus(StatusPagamento.SALDO_INSUFICIENTE);
+            return pagamentos;
         }
 
         // Debita da conta
@@ -126,11 +127,11 @@ public class PagamentoDomainService {
         repository.save(conta);
 
         // Atualiza pagamento
-        pagamento.setStatus(StatusPagamento.SUCESSO);
-        pagamento.setDataPagamento(LocalDateTime.now());
-        pagamento.setTaxas(taxas);
+        pagamentos.setStatus(StatusPagamento.SUCESSO);
+        pagamentos.setDataPagamento(LocalDateTime.now());
+        pagamentos.setTaxas(taxas);
 
-        return pagamento;
+        return pagamentos;
     }
 
 }

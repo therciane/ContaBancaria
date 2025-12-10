@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,28 +20,27 @@ import java.util.List;
 @Tag(name = "Serviços", description = "Gerenciamento de serviços da Conta Bancária")
 @RestController
 @RequestMapping("/servicos")
+@RequiredArgsConstructor
 public class ServicoController {
 
     private final ServicoAppService service;
 
-    public ServicoController(ServicoAppService service) {
-        this.service = service;
-    }
-
     @Operation(
-            summary = "Cadastrar um novo Cliente",
-            description = "Adiciona um novo serviço à base de dados após validações de saldo",
+            summary = "Cadastrar um novo Serviço",
+            description = "Adiciona um novo serviço à base de dados após validações.",
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
                             schema = @Schema(implementation = ServicoDTO.class),
-                            examples = @ExampleObject(name = "Exemplo válido", value = """
+                            examples = @ExampleObject(
+                                    name = "Exemplo válido",
+                                    value = """
                                         {
-                                          "Número da Conta": "123456",
-                                          "tipo de conta": "Conta Poupança",
+                                          "id": "12345",
+                                          "tipoConta": "POUPANCA",
                                           "saldo": 500.0
                                         }
-                                    """
+                                        """
                             )
                     )
             ),
@@ -48,21 +48,12 @@ public class ServicoController {
                     @ApiResponse(responseCode = "201", description = "Serviço cadastrado com sucesso"),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Erro de validação",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = {
-                                            @ExampleObject(name = "saldo inválido", value = "\"saldo mínimo do serviço deve ser R$ 1,00 R$\""),
-                                            @ExampleObject(name = "Conta Inexistente", value = "\"Sua Conta não existe, por favor entrar em contato com o suporte \""),
-                                            @ExampleObject(name = "Conta Duplicada", value = "\"Sua foi duplicada\""),
-                                            @ExampleObject(name = "", value = "\".\"")
-                                    }
-                            )
+                            description = "Erro de validação"
                     )
             }
     )
     @PostMapping
-    public ResponseEntity<ServicoDTO> criar(@Valid @org.springframework.web.bind.annotation.RequestBody ServicoDTO dto) {
+    public ResponseEntity<ServicoDTO> criar(@Valid @RequestBody ServicoDTO dto) {
         return ResponseEntity
                 .status(201)
                 .body(service.salvar(dto));
@@ -76,28 +67,15 @@ public class ServicoController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ServicoDTO>>listar() {
-        return ResponseEntity
-                .ok(service.listar());
-
+    public ResponseEntity<List<ServicoDTO>> listar() {
+        return ResponseEntity.ok(service.listar());
     }
 
     @Operation(
             summary = "Buscar serviço por ID",
             description = "Retorna um serviço existente a partir do seu ID",
             parameters = {
-                    @Parameter(name = "id", description = "ID da conta a ser buscado", example = "1")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Serviço encontrado"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Serviço não encontrado",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = @ExampleObject(value = "\"Conta com ID sfrtg456 não encontrado.\"")
-                            )
-                    )
+                    @Parameter(name = "id", description = "ID do serviço a ser buscado", example = "1")
             }
     )
     @GetMapping("/{id}")
@@ -108,7 +86,7 @@ public class ServicoController {
 
     @Operation(
             summary = "Atualizar um serviço",
-            description = "Atualiza os dados de um serviço existente com novas informações",
+            description = "Atualiza os dados de um serviço existente com novas informações.",
             parameters = {
                     @Parameter(name = "id", description = "ID do serviço a ser atualizado", example = "1")
             },
@@ -116,59 +94,32 @@ public class ServicoController {
                     required = true,
                     content = @Content(
                             schema = @Schema(implementation = ServicoDTO.class),
-                            examples = @ExampleObject(name = "Exemplo de atualização", value = """
-                        {
-                          "descricao": "Revisão completa",
-                          "saldo": 200.0
-                        }
-                    """)
-                    )
-            ),
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Serviço atualizado com sucesso"),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Erro de validação",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = {
-                                            @ExampleObject(name = "saldo inválido", value = "\"Preço mínimo do serviço deve ser R$ 1,00 R$\""),
-                                            @ExampleObject(name = "Numero da Conta", value = "\"Numero da conta invalido\"")
-                                    }
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Serviço não encontrado",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = @ExampleObject(value = "\"Serviço com ID 99 não encontrado.\"")
+                            examples = @ExampleObject(
+                                    name = "Exemplo de atualização",
+                                    value = """
+                                        {
+                                          "id": "12345",
+                                          "tipoConta": "CORRENTE",
+                                          "saldo": 200.0
+                                        }
+                                        """
                             )
                     )
-            }
+            )
     )
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoDTO> atualizar(@PathVariable String id, @Valid @org.springframework.web.bind.annotation.RequestBody ServicoDTO dto) {
-        return ResponseEntity
-                .ok(service.atualizar(id, dto));
+    public ResponseEntity<ServicoDTO> atualizar(
+            @PathVariable String id,
+            @Valid @RequestBody ServicoDTO dto
+    ) {
+        return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
     @Operation(
             summary = "Deletar um serviço",
-            description = "Remove sua conta através do numero da conta",
+            description = "Remove um serviço através do ID informado.",
             parameters = {
-                    @Parameter(name = "id", description = "ID da conta a ser deletada", example = "1")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Serviço removido com sucesso"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Serviço não encontrado",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = @ExampleObject(value = "\"Serviço com ID 99 não encontrado.\"")
-                            )
-                    )
+                    @Parameter(name = "id", description = "ID do serviço a ser deletado", example = "1")
             }
     )
     @DeleteMapping("/{id}")
@@ -176,6 +127,4 @@ public class ServicoController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
-

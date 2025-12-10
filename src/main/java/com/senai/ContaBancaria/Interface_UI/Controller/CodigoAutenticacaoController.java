@@ -2,32 +2,33 @@ package com.senai.ContaBancaria.Interface_UI.Controller;
 
 import com.senai.ContaBancaria.Application.DTO.CodigoAutenticacaoDTO;
 import com.senai.ContaBancaria.Application.Service.AutenticacaoIotService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
-@Controller
+@RestController
+@RequestMapping("/api/autenticacao")
+@RequiredArgsConstructor
 public class CodigoAutenticacaoController {
 
-    private AutenticacaoIotService service;
+    private final AutenticacaoIotService service;
 
     @PostMapping("/{id}")
-    public ResponseEntity<CodigoAutenticacaoDTO> solicitarCodigoAutenticacao(@PathVariable String id) {
+    public ResponseEntity<Void> solicitarCodigoAutenticacao(@PathVariable String id) {
+
         service.solicitarAutenticacao(id);
-        return ResponseEntity.accepted().build();
+
+        return ResponseEntity.accepted().build(); // 202 - código IoT enviado
     }
 
     @PostMapping("/{id}/validar")
     public ResponseEntity<CodigoAutenticacaoDTO> receberValidacao(
-            @PathVariable UUID id,
+            @PathVariable String id,
             @RequestParam String recebido,
             @RequestParam Boolean valido
     ) {
-        return ResponseEntity.ok(service.receberValidacao(id, recebido, valido));
-    }
+        var resposta = service.receberValidacao(id, recebido, valido);
 
+        return ResponseEntity.ok(resposta); // 200 - validado com sucesso
+    }
 }
