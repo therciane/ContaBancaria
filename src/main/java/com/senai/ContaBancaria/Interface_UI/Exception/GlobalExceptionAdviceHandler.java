@@ -50,7 +50,7 @@ public class GlobalExceptionAdviceHandler {
     public ProblemDetail handleRendimentoInvalido(RendimentoInvalidoException ex, HttpServletRequest req) {
         return buildProblem(
                 HttpStatus.BAD_REQUEST,
-                "Rendimento aplicado indevidamente",
+                "Rendimento aplicado indevidamente!",
                 ex.getMessage(),
                 req.getRequestURI()
         );
