@@ -8,18 +8,24 @@ import java.time.LocalDateTime;
 
 public class ProblemDetailsUtils {
 
+    private ProblemDetailsUtils() { }
+
     public static ProblemDetail buildProblem(
             HttpStatus status,
             String title,
             String detail,
             String path
     ) {
+
         ProblemDetail problem = ProblemDetail.forStatus(status);
-        problem.setTitle(title);
+
+        problem.setTitle(title != null ? title : status.getReasonPhrase());
         problem.setDetail(detail);
         problem.setInstance(URI.create(path));
+
         problem.setProperty("timestamp", LocalDateTime.now());
         problem.setProperty("application", "ContaBancariaAPI");
+
         return problem;
     }
 }
